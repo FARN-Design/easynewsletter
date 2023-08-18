@@ -1,0 +1,30 @@
+.en_tableStyle{
+    width: 100%;
+    table-layout: fixed;
+    margin-top: 20px;
+    padding: 0;
+    border-spacing: 20px 0;
+    text-align: center;
+}
+
+.en_tableStyle thead, .en_tableStyle tbody{
+    background: white;
+    padding: 0;
+}
+
+.en_tableStyle th{
+    border-bottom: #2271b1 solid 1px;
+}
+
+.en_tableStyle td{
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.en_overviewInfos{
+    text-align: left;
+}
+
+.en_overviewInfos div{
+    margin-left: 20px;
+}

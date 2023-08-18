@@ -1,0 +1,79 @@
+.post-type-en_subscribers .wp-list-table thead{
+    position: sticky;
+    top: 30px;
+    background-color: white;
+    z-index: 100;
+}
+.post-type-en_subscribers .wp-list-table #the-list td[class^="en_"] {
+    position: relative;
+    padding-right: 30px;
+}
+
+.post-type-en_subscribers .wp-list-table .row-actions {
+    display: none;
+}
+.post-type-en_subscribers .wp-list-table .column-author img,
+.post-type-en_subscribers .wp-list-table .column-comment .comment-author img,
+.post-type-en_subscribers .wp-list-table .column-username img {
+    display: none;
+}
+
+.wp-list-table .edit_button,
+.wp-list-table .save_button,
+.wp-list-table .exit_button {
+    display: none;
+    cursor:pointer;
+    width:20px;
+    height:20px;
+    border-radius: 2px;
+    margin-top:5px;
+    margin-right:5px;
+    position: absolute;
+    top:0;
+    right:0;
+}
+.wp-list-table .edit_button:hover,
+.wp-list-table .save_button:hover,
+.wp-list-table .exit_button:hover {
+    background-color:#e0e0e0;
+}
+.wp-list-table .save_button {
+    color:green;
+    top:0;
+}
+.wp-list-table .exit_button {
+    color:red;
+    top:16px;
+}
+.wp-list-table .edit_button {
+    color:#888;
+    top:3px;
+}
+.wp-list-table .column_content:empty + .edit_button::before {
+    content: "\f543";
+}
+.wp-list-table .column_content:empty + .edit_button {
+    left:8px;
+}
+
+
+.wp-list-table .edit_active .save_button,
+.wp-list-table .edit_active .exit_button,
+.wp-list-table #the-list tr:hover .edit_button {
+    display: inline-block;
+}
+
+.wp-list-table .edit_active .edit_button,
+.wp-list-table .edit_active .column_content {
+    display: none !important;
+}
+.wp-list-table .edit_input {
+    display: none;
+    max-width:100%;
+}
+.wp-list-table .edit_input input {
+    max-width:100%;
+}
+.wp-list-table .edit_active .edit_input {
+    display: inline-block;
+}

@@ -1,0 +1,371 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2023-04-27 14:31+0200\n"
+"PO-Revision-Date: 2023-04-27 14:32+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: resources/jsx\n"
+
+#: farnLicence.php:102
+msgid "Please enter valid licence"
+msgstr "Gültige Lizenz eingeben"
+
+#: farnLicence.php:109
+msgid "Licence:"
+msgstr "Lizenz:"
+
+#: farnLicence.php:115
+msgid "Check Licence"
+msgstr "Überprüfe die Lizenz"
+
+#: menuPage.php:62 menuPage.php:63
+msgid "Newsletter Statistics"
+msgstr "Newsletter Statistiken"
+
+#: menuPage.php:77 menuPage.php:78
+msgid "Link Statistics"
+msgstr "Link Statistiken"
+
+#: menuPageContent.php:68 registration/registrationFormContent.php:17
+#: subscriberPostType.php:46
+msgid "Salutation"
+msgstr "Anrede"
+
+#: menuPageContent.php:69 registration/registrationFormContent.php:18
+#: subscriberPostType.php:47
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: menuPageContent.php:70 subscriberPostType.php:48
+msgid "First Name"
+msgstr "Vorname"
+
+#: menuPageContent.php:71 registration/registrationFormContent.php:20
+#: subscriberPostType.php:49
+msgid "Last Name"
+msgstr "Nachname"
+
+#: menuPageContent.php:72 registration/registrationFormContent.php:21
+#: subscriberPostType.php:50
+msgid "Telephone Number"
+msgstr "Telefonnummer"
+
+#: menuPageContent.php:79
+msgid "Email Address"
+msgstr "Absender E-Mail Adresse"
+
+#: menuPageContent.php:101
+msgid "Add new category"
+msgstr "Kategorie hinzufügen"
+
+#: menuPageContent.php:110
+msgid "Add new role"
+msgstr "Rolle hinzufügen"
+
+#: menuPageContent.php:116
+msgid "Easy Newsletter Settings"
+msgstr "Easy Newsletter Einstellungen"
+
+#: menuPageContent.php:126
+msgid "Sender email address"
+msgstr "Absender E-Mail Adresse"
+
+#: menuPageContent.php:127
+msgid "Sender email name"
+msgstr "Absender E-Mail Name"
+
+#: menuPageContent.php:128
+msgid "Reply to email address"
+msgstr "Antwort an E-Mail Adresse"
+
+#: menuPageContent.php:129
+msgid "Max send email per interval"
+msgstr "Maximal gesendete E-Mails pro Intervall"
+
+#: menuPageContent.php:130
+msgid "Interval in seconds"
+msgstr "Intervall in Sekunden"
+
+#: menuPageContent.php:131
+msgid "Signup form fields"
+msgstr "Anmeldeformular-Felder"
+
+#: menuPageContent.php:132
+msgid "Currently active newsletter"
+msgstr "Derzeit aktiver Newsletter"
+
+#: menuPageContent.php:133
+msgid "Currently active newsletter ID"
+msgstr "Derzeit aktiver Newsletter-ID"
+
+#: menuPageContent.php:134
+msgid "Selected Mode"
+msgstr "Ausgewählter Modus"
+
+#: menuPageContent.php:135
+msgid "Sending in progress"
+msgstr "Sendevorgang läuft"
+
+#: menuPageContent.php:136
+msgid "Standard activation post ID"
+msgstr "Standard-Aktivierungsnachricht-ID"
+
+#: menuPageContent.php:137
+msgid "Standard unsubscribe post ID"
+msgstr "Standard-Abmeldungsnachricht-ID"
+
+#: menuPageContent.php:138
+msgid "Standard welcome post ID"
+msgstr "Standard-Willkommensnachricht-ID"
+
+#: menuPageContent.php:139
+msgid "Available subscriber category"
+msgstr "Verfügbare Abonnentenkategorie"
+
+#: menuPageContent.php:140
+msgid "Available subscriber roles"
+msgstr "Verfügbare Abonnentenrollen"
+
+#: menuPageContent.php:141
+msgid "Custom newsletter CSS"
+msgstr "Benutzerdefiniertes Newsletter-CSS"
+
+#: menuPageContent.php:142
+msgid "New user role key"
+msgstr "Rollen Key von neuen Abonnenten"
+
+#: menuPageContent.php:143
+msgid "Registration page id"
+msgstr "Registrierung, Seiten-ID"
+
+#: menuPageContent.php:144
+msgid "Registration success page id"
+msgstr "Registrierung erfolgreich, Seiten-ID"
+
+#: menuPageContent.php:145
+msgid "Confirmation success page id"
+msgstr "Bestätigung erfolgreich, Seiten-ID"
+
+#: menuPageContent.php:146
+msgid "Confirmation denied page id"
+msgstr "Bestätigung abgelehnt, Seiten-ID"
+
+#: menuPageContent.php:147
+msgid "Unsubscribed page id"
+msgstr "Abgemeldet, Seiten-ID"
+
+#: menuPageContent.php:148
+msgid "Registration form page id"
+msgstr "Registrierungsformular, Seiten-ID"
+
+#: menuPageContent.php:166 registration/registrationFormContent.php:34
+msgid "Save"
+msgstr "Speichern"
+
+#: menuPageContent.php:168
+msgid "Press this Button to stop the Newsletter sending Process"
+msgstr "Drücken Sie diese Taste, um den Versand des Newsletters zu stoppen"
+
+#: menuPageContent.php:169
+msgid "Stop Newsletter Sending Process"
+msgstr "Newsletterversand stoppen"
+
+#: newsletterPostType.php:82 newsletterPostType.php:83
+#: statisticsPageContent.php:24
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: newsletterPostType.php:119
+msgid "Already Send"
+msgstr "Bereits versendet"
+
+#: newsletterPostType.php:332
+msgid "sendingInProgress"
+msgstr "Sendevorgang läuft"
+
+#: newsletterPostType.php:366
+msgid "Receiver:"
+msgstr "Empfänger:"
+
+#: newsletterPostType.php:390
+msgid "Custom HTML Injection"
+msgstr "Eigene HTML-Injektion hinzufügen"
+
+#: newsletterPostType.php:402
+msgid "Current HTML injection for this newsletter:"
+msgstr "Derzeit aktiver Newsletter:"
+
+#: newsletterPostType.php:411 newsletterPostType.php:477
+#: newsletterPostType.php:532
+msgid "Remove"
+msgstr "Entfernen"
+
+#: newsletterPostType.php:415
+msgid "No custom Injections defined."
+msgstr "Keine eigenen HTML-Injektionen definiert."
+
+#: newsletterPostType.php:421
+msgid "Add new custom HTML injection:"
+msgstr "Neue eigene HTML-Injektion hinzufügen:"
+
+#: newsletterPostType.php:423
+msgid "Input Custom Key"
+msgstr "Benutzerdefinierter Eingabeschlüssel"
+
+#: newsletterPostType.php:436
+msgid "Save new Injection"
+msgstr "Neue HTML-Injektion speichern"
+
+#: newsletterPostType.php:472
+msgid "Added attachments to this newsletter:"
+msgstr "Hinzugefügt Anhänge an diesen Newsletter:"
+
+#: newsletterPostType.php:480
+msgid "No attachments added."
+msgstr "Keine Anhänge wurden hinzugefügt."
+
+#: newsletterPostType.php:486
+msgid "Add new attachment:"
+msgstr "Neuen Anhang hinzufügen:"
+
+#: newsletterPostType.php:488
+msgid "Attachment URL"
+msgstr "Anhang URL"
+
+#: newsletterPostType.php:490
+msgid "Save new attachment"
+msgstr "Neuen Anhang speichern"
+
+#: newsletterPostType.php:513
+msgid "Custom MetaFields Conditions"
+msgstr "Benutzerdefinierte MetaFields-Bedingungen"
+
+#: newsletterPostType.php:524
+msgid "Current rules for this Newsletter:"
+msgstr "Derzeit aktiver Newsletter:"
+
+#: newsletterPostType.php:535
+msgid "No custom rules defined."
+msgstr "Keine eigenen Regeln definiert."
+
+#: newsletterPostType.php:541
+msgid "Add new rule:"
+msgstr "Rolle hinzufügen:"
+
+#: newsletterPostType.php:560
+msgid "Input Meta Value"
+msgstr "Eingabe Meta Wert"
+
+#: newsletterPostType.php:562
+msgid "Save new condition"
+msgstr "Neue Regel speichern"
+
+#: registration/registrationForm.php:21
+msgid "Email already in use!"
+msgstr "Diese E-Mail Adresse wird bereits verwendet!"
+
+#: registration/registrationFormContent.php:16 subscriberPostType.php:53
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: registration/registrationFormContent.php:19
+msgid "Fist Name"
+msgstr "Vorname"
+
+#: statisticsLinkPageContent.php:9
+msgid "Access statistics for links in newsletters"
+msgstr "Zugriffsstatistiken zu Links in gesendeten Newslettern"
+
+#: statisticsLinkPageContent.php:14
+msgid "Currently no links found in database"
+msgstr "Aktuell wurden keine Links in der Datenbank gefunden"
+
+#: statisticsLinkPageContent.php:23
+msgid "Link"
+msgstr "Link"
+
+#: statisticsLinkPageContent.php:26 statisticsPageContent.php:30
+msgid "Count"
+msgstr "Anzahl"
+
+#: statisticsPageContent.php:10
+msgid "Access statistics for newsletters"
+msgstr "Aufrufstatistiken von Newslettern"
+
+#: statisticsPageContent.php:15
+msgid "Currently no newsletter found in database"
+msgstr "Derzeit aktiver Newsletter-ID"
+
+#: statisticsPageContent.php:27
+msgid "Total Send Newsletter"
+msgstr "Insgesamt versendete Newsletter"
+
+#: statisticsPageContent.php:33
+msgid "Confirmed Receiver"
+msgstr "Bestätigte Empfänger"
+
+#: statisticsPageContent.php:68
+msgid "show all"
+msgstr "Alle anzeigen"
+
+#: statisticsPageContent.php:69
+msgid "show less"
+msgstr "Weniger anzeigen"
+
+#: subscriberPostType.php:54
+msgid "Status"
+msgstr "Status"
+
+#: subscriberPostType.php:55
+msgid "Double Opt In"
+msgstr "Doppelte Zustimmung"
+
+#: subscriberPostType.php:56
+msgid "Token"
+msgstr "Kennzeichen"
+
+#: subscriberPostType.php:57
+msgid "Last Newsletter"
+msgstr "Letzter Newsletter"
+
+#: subscriberPostType.php:58
+msgid "All Received Newsletter"
+msgstr "Alle empfangenen Newsletter"
+
+#: subscriberPostType.php:59
+msgid "Subscriber Category"
+msgstr "Abonenntenkategorie"
+
+#: subscriberPostType.php:60
+msgid "Subscriber Role"
+msgstr "Abonenntenrolle"
+
+#: subscriberPostType.php:86
+msgid "Subscribers"
+msgstr "Abonennten"
+
+#: subscriberPostType.php:87
+msgid "Subscriber"
+msgstr "Abonnent"
+
+#~ msgid "Link ID"
+#~ msgstr "Link-ID"
+
+#~ msgid "Hash Value"
+#~ msgstr "Hashwert"
+
+#~ msgid "Newsletter ID"
+#~ msgstr "Newsletter ID"
+
+#~ msgid "Newsletters"
+#~ msgstr "Newsletters"

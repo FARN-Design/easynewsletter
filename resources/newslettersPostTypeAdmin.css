@@ -1,0 +1,55 @@
+.en_wantToSendNewsletter, .en_newsletterScheduleButton{
+    background-color:#DFEEEF !important;
+    padding: 6px 1.2em !important;
+    margin-right: 1.5em;
+}
+.en_TestmailButton {
+    margin-right: 4em;
+    position: relative;
+}
+.en_TestmailButton::after {
+    content:'';
+    height:20px;
+    width:2px;
+    background-color:#ddd;
+    display: inline-block;
+    position: absolute;
+    right:-2em;
+}
+.en_newsletterAdminPopup {
+    position: fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:10000;
+}
+.en_newsletterAdminPopup.hidden {
+    display: none;
+}
+.en_newsletterAdminPopup .en_newsletterAdminPopupContent{
+    position: absolute;
+    top:50%;
+    background-color:white;
+    padding:2em;
+    left:50%;
+    transform:translateY(-50%) translateX(-50%);
+    z-index:10000;
+}
+.en_newsletterAdminPopup .en_newsletterAdminPopupContent span{
+    display: block;
+    width:100%;
+    margin-bottom:20px;
+}
+.en_newsletterAdminPopup .en_newsletterAdminPopupContent button{
+    margin-right:10px;
+}
+.en_newsletterAdminPopup .en_newsletterAdminPopupBackground {
+    position: absolute;
+    top:0;
+    background-color:rgba(0,0,0,0.7);
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:9999;
+}

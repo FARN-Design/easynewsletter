@@ -1,0 +1,43 @@
+:root {
+    color-scheme: light;
+    supported-color-schemes: light;
+}
+body {
+    padding: 0;
+    margin: 0;
+}
+.enl-wrapper {
+    padding: 0;
+    margin: 0;
+}
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+figure {
+    margin: 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 1em;
+}
+td{
+    padding: 0;
+    margin: 0;
+}
+
+
+/* Layout */
+.is-content-justification-center {
+  text-align: center;
+}
+
+.wp-block-social-link {
+  display: inline-block;
+}
+.screen-reader-text {
+  display: none;
+}

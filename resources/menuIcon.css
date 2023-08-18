@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Easy-Plugins';
+    src:url('fonts/Easy-Plugins.woff') format('woff'),
+        url('fonts/Easy-Plugins.eot') format('embedded-opentype'),
+        url('fonts/Easy-Plugins.ttf') format('truetype'),
+        url('fonts/Easy-Plugins.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+#adminmenu #toplevel_page_easyNewsletter div.wp-menu-image::before {
+    font-family: "Easy-Plugins" !important;
+    content: "\1f48c";
+    font-size: 1.6em;
+}
