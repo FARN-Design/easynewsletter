@@ -1,5 +1,4 @@
 jQuery(document).ready(function($) {
-    console.log('test');
 
     // click on "edit"-Button
     $(document).on('click','.edit_button', function() {
@@ -54,5 +53,52 @@ jQuery(document).ready(function($) {
             console.log('Error');
         });
     });
+
+    $(".page-title-action").remove()
+    $(".wp-heading-inline").after("<button class='page-title-action' data-state='1'>Add New Subscriber</button>")
+
+    $(document).on("click", ".page-title-action",function() {
+
+        const button = $(".page-title-action")
+
+        $(".en_feedback").remove()
+
+        if (button.data("state") === 1){
+            button.data("state", 2)
+            button.before("<input class='en_input_email' type='email' placeholder='Email'>")
+            button.prop("innerText", "Save new Subscriber")
+            button.css("color", "#319353")
+            button.css("border-color", "#319353")
+            button.css("box-shadow", "none")
+        } else if (button.data("state") === 2){
+
+            const username = $(".en_input_user").val()
+            const email = $(".en_input_email").val()
+
+            var ajax_data = {
+                action:  'addBackendSubscriber',
+                security:  ajax_nonce,
+                username: username,
+                email: email
+            };
+            jQuery.ajax({
+                url : ajax_url,
+                type : 'POST',
+                data: ajax_data,
+            })
+                .done(function(data){
+                    $(".en_input_email").remove()
+                    button.prop("innerText", "Add New Subscriber")
+                    button.css("color", "#2271b1")
+                    button.css("border-color", "#2271b1")
+                    button.after("<span style='margin-left: 20px' class='en_feedback'>"+data+"</span>")
+                    location.reload();
+                })
+                .fail(function(data){
+                    button.after("<p class='en_feedback'>This email is already registered!</p>")
+                });
+        }
+
+    })
 
 });

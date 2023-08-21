@@ -41,7 +41,11 @@ class subscriberPostType {
 		add_action( 'wp_ajax_saveBackendSubscriberCustomContent', array( $this,'saveBackendSubscriberCustomContent'));
 		add_action( 'wp_ajax_nopriv_saveBackendSubscriberCustomContent', array( $this,'saveBackendSubscriberCustomContent'));
 
-        self::$metaFieldsOptional = array(
+		add_action( 'wp_ajax_addBackendSubscriber', array( $this,'addBackendSubscriber'));
+		add_action( 'wp_ajax_nopriv_addBackendSubscriber', array( $this,'addBackendSubscriber'));
+
+
+		self::$metaFieldsOptional = array(
 	        'en_salutation' => __('Salutation','easynewsletter'),
 	        'en_gender' => __('Gender','easynewsletter'),
 	        'en_firstName' => __('First Name', 'easynewsletter'),
@@ -246,5 +250,38 @@ class subscriberPostType {
 			wp_update_post($post);
 		}
 		return $post;
+	}
+
+
+	public function addBackendSubscriber(){
+		check_ajax_referer( 'secure_nonce_name', 'security' );
+
+		// prevent XSS
+		$_GET   = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
+		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+		if (!isset($_POST["email"])) {
+			echo 'Username or email missing!';
+		}
+
+		$query = new \WP_Query(array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ));
+		while ($query->have_posts()){
+			$query->the_post();
+			if (get_post_meta( get_the_ID(),"en_eMailAddress", true) == $_POST["email"]){
+				throw new \Exception("This email is already registered!");
+			}
+		}
+
+
+		$id = wp_insert_post(array(
+			"post_type" => "en_subscribers",
+			"post_title" => $_POST['email'],
+			"post_status" => "publish",
+		));
+
+		update_post_meta($id, "en_eMailAddress", $_POST["email"]);
+		subscriberHandler::instance()->fillRequireMetaFieldsWithDefaults($id);
+
+		wp_die();
 	}
 }
