@@ -133,6 +133,16 @@ If something is still wrong, you can cancel the sending by clicking "No".
 
 == Screenshots ==
 
+1. Newsletter Creation
+2. Sign Up Form
+3. Newsletter Check
+4. Newsletter Meta Fields
+5. Subscribers Overview
+6. Plugin Overview
+7. Newsletter Overview
+8. Settings
+9. Newsletter Attachments and HTML Replacement
+
 == Changelog ==
 
 = 1.0.0 =
