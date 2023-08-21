@@ -1,2 +1,4 @@
 # Project exclude paths
 /.
+.wordpress-org/.DS_Store
+.DS_Store
