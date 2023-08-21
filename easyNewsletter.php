@@ -6,7 +6,7 @@ Plugin URI: https://www.easy-wordpress-plugins.de/
 Description: Provides a Newsletter functionality with complete WordPress integration.
 Version: 1.0.0
 Author: Farn - Digital Brand Design
-Author URI: https://www.easy-wordpress-plugins.de/
+Author URI: https://www.farn.de/
 Text Domain: easynewsletter
 Domain Path: resources/language
 License: GNU GENERAL PUBLIC LICENSE Version 3
