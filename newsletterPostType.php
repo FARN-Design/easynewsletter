@@ -41,12 +41,6 @@ class newsletterPostType {
 		add_action( 'wp_ajax_en_wantToSendNewsletter', array( $this,'en_wantToSendNewsletter'));
 		add_action( 'wp_ajax_nopriv_en_wantToSendNewsletter', array( $this,'en_wantToSendNewsletter'));
 
-		add_action( 'wp_ajax_en_scheduleNewsletter', array( $this,'en_scheduleNewsletter'));
-		add_action( 'wp_ajax_nopriv_en_scheduleNewsletter', array( $this,'en_scheduleNewsletter'));
-
-		add_action( 'wp_ajax_en_scheduleLock', array( $this,'en_scheduleLock'));
-		add_action( 'wp_ajax_nopriv_en_scheduleLock', array( $this,'en_scheduleLock'));
-
 		add_filter( 'single_template', array( $this,'en_pageTemplate') );
 
 		add_action("save_post_en_newsletters", array($this, "saveLastEditPost"), 10, 1);
@@ -92,15 +86,17 @@ class newsletterPostType {
 	}
 
 	public function addMenuPage(){
-		add_submenu_page(
-			'easyNewsletter',
-			__('All Newsletter', 'easynewsletter'), /*page title*/
-			__('All Newsletter', 'easynewsletter'), /*menu title*/
-			'manage_options', /*roles and capabiliyt needed*/
-			"edit.php?post_type=en_newsletters",
-			"",
-			1
-		);
+		if (farnLicence::validLicence()){
+			add_submenu_page(
+				'easyNewsletter',
+				__('All Newsletter', 'easynewsletter'), /*page title*/
+				__('All Newsletter', 'easynewsletter'), /*menu title*/
+				'manage_options', /*roles and capabiliyt needed*/
+				"edit.php?post_type=en_newsletters",
+				"",
+				1
+			);
+		}
 	}
 
 	/**
@@ -154,12 +150,12 @@ class newsletterPostType {
 		$postTitle = "Default - " . $postTitle;
 
 		$postID = post_exists($postTitle);
-		if ( $postID == 0 || get_post_status($postID) != 'draft'){
+		if ( $postID == 0 || get_post_status($postID) != 'publish'){
 			$wordpress_page = array(
 				'post_title'    => $postTitle,
 				'post_content'  => $content,
 				'post_name' => $postName,
-				'post_status'   => 'draft',
+				'post_status'   => 'publish',
 				'post_author'   => 1,
 				'post_type' => 'en_newsletters'
 			);
@@ -257,7 +253,6 @@ class newsletterPostType {
 		</style>
 		</head>
 		<body>
-			<div style="display:none;" class="en_previewtext">'.get_post_meta($postID,"en_excerpt", true).'</div>
 			<table class="enl-wrapper"><tr><td class="enl-inner">';
 
 		$enl_mailcontent_foot = '</td></tr></table>
@@ -271,9 +266,8 @@ class newsletterPostType {
 
 		/* Convert Content */
 
-		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
-
 		include('resources/simple_html_dom.php');
+
 
 		// Cover
 		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
@@ -306,6 +300,8 @@ class newsletterPostType {
 		/* switch figure to div */
 		$enl_mailcontent_body = str_replace('<figure', '<div', $enl_mailcontent_body);
 		$enl_mailcontent_body = str_replace('</figure>', '</div>', $enl_mailcontent_body);
+
+		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
 
 		return $enl_mailcontent_head.$enl_mailcontent_body.$enl_mailcontent_foot;
 	}
@@ -420,35 +416,6 @@ class newsletterPostType {
 		databaseConnector::instance()->saveSettingInDB("lastEditedNewsletterID", $post_id);
 	}
 
-	public function en_scheduleNewsletter(){
-		check_ajax_referer('secure_nonce_name','security' );
 
-        // prevent XSS
-        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		$scheduleDate = $_POST["scheduleDate"];
-		$scheduleTime = $_POST["scheduleTime"];
-		$postID = $_POST["post_id"];
-
-        echo "Newsletter scheduled for ". $scheduleDate. " at ". $scheduleTime;
-		update_post_meta($postID, "en_scheduleLock", "active");
-
-        wp_die();
-	}
-	public function en_scheduleLock(){
-		check_ajax_referer('secure_nonce_name','security' );
-
-        // prevent XSS
-        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
-		$postID = $_POST["post_id"];
-		$lockStatus = get_post_meta($postID, "en_scheduleLock", true);
-
-		if (empty($lockStatus) || $lockStatus == "inactive"){
-			echo json_encode(["lockStatus" => "inactive"]);
-		}else{
-		}
-
-        wp_die();
-	}
 }
