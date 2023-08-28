@@ -257,6 +257,7 @@ class newsletterPostType {
 		</style>
 		</head>
 		<body>
+			<div style="display:none;" class="en_previewtext">'.get_post_meta($postID,"en_excerpt", true).'</div>
 			<table class="enl-wrapper"><tr><td class="enl-inner">';
 
 		$enl_mailcontent_foot = '</td></tr></table>
@@ -268,17 +269,43 @@ class newsletterPostType {
 		$content = $content_post->post_content;
 		$enl_mailcontent_body = $content;
 
-		/* switch columns to table structure */
-		$enl_mailcontent_body = str_replace('<!-- wp:columns -->', '<table class="enl-wrapper-wp-block-columns"><tr>', $enl_mailcontent_body);
-		$enl_mailcontent_body = str_replace('<!-- /wp:columns -->', '</tr></table>', $enl_mailcontent_body);
-		$enl_mailcontent_body = str_replace('<!-- wp:column -->', '<td>', $enl_mailcontent_body);
-		$enl_mailcontent_body = str_replace('<!-- /wp:column -->', '</td>', $enl_mailcontent_body);
+		/* Convert Content */
 
+		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
+
+		include('resources/simple_html_dom.php');
+
+		// Cover
+		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
+		foreach ($enl_mailcontent_body->find('div.wp-block-cover') as $element) {
+		 // find Imagesource from img inside
+		 $cover_imagesource = $element->find('img.wp-block-cover__image-background', 0)->src;
+		 $elementstyle_converted = str_replace('min-height:', 'background-image:url('.$cover_imagesource.');min-height:inherit;height:', $element->style);
+		 $element->outertext = '<div class="'.$element->class.'" style="'.$elementstyle_converted.'">'.$element->innertext.'</div>';
+		}
+		// Delete inner Cover Image img
+		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
+		foreach ($enl_mailcontent_body->find('img.wp-block-cover__image-background') as $element) {
+		 $element->outertext = '';
+		}
+		// Columns to Table
+		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
+		foreach ($enl_mailcontent_body->find('div.wp-block-columns') as $element) {
+		 if($element->hasClass('is-not-stacked-on-mobile')){
+		 }else{
+		 	$element->addClass('is-stacked-on-mobile');
+		 }
+		 $element->outertext = '<table class="'.$element->class.'"><tr>'.$element->innertext.'</tr></table>';
+		}
+		// Column to TD
+		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
+		foreach ($enl_mailcontent_body->find('div.wp-block-column') as $element) {
+		 $elementstyle_converted = str_replace('flex-basis:', 'width:', $element->style);
+		 $element->outertext = '<td class="'.$element->class.'" style="'.$elementstyle_converted.'">'.$element->innertext.'</td>';
+		}
 		/* switch figure to div */
 		$enl_mailcontent_body = str_replace('<figure', '<div', $enl_mailcontent_body);
 		$enl_mailcontent_body = str_replace('</figure>', '</div>', $enl_mailcontent_body);
-
-		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
 
 		return $enl_mailcontent_head.$enl_mailcontent_body.$enl_mailcontent_foot;
 	}
