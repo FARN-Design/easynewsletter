@@ -253,6 +253,7 @@ class newsletterPostType {
 		</style>
 		</head>
 		<body>
+			<div style="display:none;" class="en_previewtext">'.get_post_meta($postID,"en_excerpt", true).'</div>
 			<table class="enl-wrapper"><tr><td class="enl-inner">';
 
 		$enl_mailcontent_foot = '</td></tr></table>
@@ -266,8 +267,9 @@ class newsletterPostType {
 
 		/* Convert Content */
 
-		include('resources/simple_html_dom.php');
+		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
 
+		include('resources/simple_html_dom.php');
 
 		// Cover
 		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
@@ -300,8 +302,6 @@ class newsletterPostType {
 		/* switch figure to div */
 		$enl_mailcontent_body = str_replace('<figure', '<div', $enl_mailcontent_body);
 		$enl_mailcontent_body = str_replace('</figure>', '</div>', $enl_mailcontent_body);
-
-		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
 
 		return $enl_mailcontent_head.$enl_mailcontent_body.$enl_mailcontent_foot;
 	}
