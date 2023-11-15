@@ -86,7 +86,7 @@ class newsletterPostType {
 	}
 
 	public function addMenuPage(){
-		if (farnLicence::validLicence()){
+		if (true){
 			add_submenu_page(
 				'easyNewsletter',
 				__('All Newsletter', 'easynewsletter'), /*page title*/
