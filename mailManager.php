@@ -123,7 +123,7 @@ class mailManager {
 		$intervalInSeconds = databaseConnector::instance()->getSettingFromDB("intervalInSeconds");
 		$schedules['easyNewsletterInterval'] = array(
 			'interval' => $intervalInSeconds,
-			'display'  => esc_html__( 'every_'.$intervalInSeconds.'_seconds' ), );
+			'display'  => 'every_'.$intervalInSeconds.'_seconds');
 		return $schedules;
 	}
 

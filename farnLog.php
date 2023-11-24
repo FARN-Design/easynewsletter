@@ -14,7 +14,7 @@ class farnLog{
     {
         $handle = fopen(__DIR__."/farnLog.txt", "a");
         error_log("DEBUG INFO: PATH:".__DIR__."/farnLog.txt");
-        fwrite($handle, date('d-m-y h:i:s'). ": ".$logEntry  . "\n");
+        fwrite($handle, gmdate('d-m-y h:i:s'). ": ".$logEntry  . "\n");
         fclose($handle);
     }
 }

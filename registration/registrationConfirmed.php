@@ -2,7 +2,7 @@
 
 namespace easyNewsletter;
 
-$email = $_GET["email"];
+$email = sanitize_email($_GET["email"]);
 $token = $_GET["token"];
 
 

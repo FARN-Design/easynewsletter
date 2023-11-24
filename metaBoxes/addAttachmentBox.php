@@ -32,7 +32,7 @@ class addAttachmentBox {
 					<?php
 					$array = unserialize(get_post_meta($post->ID, "en_newsletter_attachments", true));
 					foreach ($array as $value){
-						echo "<div><input type='text' class='en_newsletterAttachmentURL' disabled value='".$value."'><button class='button en_delete_attachment'>"._e('Remove', 'easynewsletter')."</button></div>";
+						echo "<div><input type='text' class='en_newsletterAttachmentURL' disabled value='".esc_attr($value)."'><button class='button en_delete_attachment'>"._e('Remove', 'easynewsletter')."</button></div>";
 					}
 					if (empty($array)) {
 						echo "<p>".__('No attachments added.',"easynewsletter")."</p>";

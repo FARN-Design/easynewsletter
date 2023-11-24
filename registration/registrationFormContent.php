@@ -13,22 +13,22 @@ namespace easyNewsletter;
 		if($signupFormFields !== false){
 			foreach ($signupFormFields as $signupFormField){
 				echo match ($signupFormField){
-					"en_eMailAddress" => "<label for='" . $signupFormField . "'>" . __('E-Mail','easynewsletter'),
-					"en_salutation" => "<label for='" . $signupFormField . "'>" . __('Salutation','easynewsletter'),
-					"en_gender" => "<label for='" . $signupFormField . "'>" . __('Gender','easynewsletter'),
-					"en_firstName" => "<label for='" . $signupFormField . "'>" . __('Fist Name', 'easynewsletter'),
-					"en_lastName" => "<label for='" . $signupFormField . "'>" . __('Last Name','easynewsletter'),
-					"en_telephoneNumber" => "<label for='" . $signupFormField . "'>" . __('Telephone Number', 'easynewsletter'),
-					"en_eMailAddressValidation" => "<label for='" . $signupFormField . "'>" . __('Validate E-Mail', 'easynewsletter'),
+					"en_eMailAddress" => "<label for='" . esc_attr($signupFormField) . "'>" . __('E-Mail','easynewsletter'),
+					"en_salutation" => "<label for='" . esc_attr($signupFormField) . "'>" . __('Salutation','easynewsletter'),
+					"en_gender" => "<label for='" . esc_attr($signupFormField) . "'>" . __('Gender','easynewsletter'),
+					"en_firstName" => "<label for='" . esc_attr($signupFormField) . "'>" . __('Fist Name', 'easynewsletter'),
+					"en_lastName" => "<label for='" . esc_attr($signupFormField) . "'>" . __('Last Name','easynewsletter'),
+					"en_telephoneNumber" => "<label for='" . esc_attr($signupFormField) . "'>" . __('Telephone Number', 'easynewsletter'),
+					"en_eMailAddressValidation" => "<label for='" . esc_attr($signupFormField) . "'>" . __('Validate E-Mail', 'easynewsletter'),
                     "en_securityQuestion" => "",
-					default => "<label for='" . $signupFormField . "'>".$signupFormField
+					default => "<label for='" . esc_attr($signupFormField) . "'>".$signupFormField
 				};
 
 				echo match ( $signupFormField ) {
-					'en_eMailAddress', "en_eMailAddressValidation"=> "<input type='email' name='" . $signupFormField . "' id='" . $signupFormField . "' value='' required class='en_inputCheck' oninput='en_validationCheck()'>",
-					'telephoneNumber'=> "<input type=' tel' name='" . $signupFormField . "' id='" . $signupFormField . "' value='' required class='en_inputCheck'>",
+					'en_eMailAddress', "en_eMailAddressValidation"=> "<input type='email' name='" . esc_attr($signupFormField) . "' id='" . esc_attr($signupFormField) . "' value='' required class='en_inputCheck' oninput='en_validationCheck()'>",
+					'telephoneNumber'=> "<input type=' tel' name='" . esc_attr($signupFormField) . "' id='" . esc_attr($signupFormField) . "' value='' required class='en_inputCheck'>",
 					"en_securityQuestion" => "",
-					default => "<input type='text' name='" . $signupFormField . "' id='" . $signupFormField . "' value='' required>",
+					default => "<input type='text' name='" . esc_attr($signupFormField) . "' id='" . esc_attr($signupFormField) . "' value='' required>",
 				};
 				echo "</label>";
 			}

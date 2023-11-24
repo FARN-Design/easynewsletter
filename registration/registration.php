@@ -197,10 +197,11 @@ class registration {
 
 	public function easyNewsletterUnsubscribeForm(): string|bool {
 		ob_start();
-		if (isset($_GET["submit"]) && isset($_GET["email"])){
+		$email = sanitize_email($_GET["email"]);
+		if (isset($_GET["submit"]) && isset($email)){
 			try {
-				mailManager::instance()->sendUnsubscribeMail($_GET["email"]);
-				echo "<div class='en_unsubscribeFromSuccessMessageContainer'><p>Unsubscribe e-mail send to: ".$_GET["email"]."</p></div>";
+				mailManager::instance()->sendUnsubscribeMail($email);
+				echo "<div class='en_unsubscribeFromSuccessMessageContainer'><p>Unsubscribe e-mail send to: ".$email."</p></div>";
 			} catch (\Error $e){
 				echo "<div class='en_unsubscribeFromErrorMessageContainer'><p>The e-mail was not found in out mailing list!</p></div>";
 			}

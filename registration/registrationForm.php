@@ -6,6 +6,7 @@ if (isset($_REQUEST['submit'])){
 
     $metaFields = array();
 
+
     foreach ($_REQUEST as $field => $input){
         if ($field != 'submit'){
             $metaFields[$field] = sanitize_text_field($input);
