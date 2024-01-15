@@ -86,18 +86,16 @@ class newsletterPostType {
 	}
 
 	public function addMenuPage(){
-		if (true){
-			add_submenu_page(
-				'easyNewsletter',
-				__('All Newsletter', 'easynewsletter'), /*page title*/
-				__('All Newsletter', 'easynewsletter'), /*menu title*/
-				'manage_options', /*roles and capabiliyt needed*/
-				"edit.php?post_type=en_newsletters",
-				"",
-				1
-			);
-		}
-	}
+		add_submenu_page(
+			'easyNewsletter',
+			__('All Newsletter', 'easynewsletter'), /*page title*/
+			__('All Newsletter', 'easynewsletter'), /*menu title*/
+			'manage_options', /*roles and capabiliyt needed*/
+			"edit.php?post_type=en_newsletters",
+			"",
+			1
+		);
+}
 
 	/**
 	 * Adds new columns to the posttype newsletters.

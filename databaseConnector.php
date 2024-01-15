@@ -118,8 +118,8 @@ class databaseConnector {
 	public function initDatabase(): void {
 
 		$this->createDatabaseTable();
-
-		$results = $this->wpdb->get_results('SELECT Setting FROM ' .$this->tableName, ARRAY_N);
+		$query = $this->wpdb->prepare("SELECT Setting FROM %i", $this->tableName);
+		$results = $this->wpdb->get_results($query, ARRAY_N);
 		$results = array_column($results,0);
 
 		foreach ($this->defaultSettings as $key => $value) {
@@ -141,7 +141,7 @@ class databaseConnector {
 	 */
 	public function getSettingFromDB( string $setting): mixed {
 
-		$sql = "SELECT Value FROM ".$this->tableName . " WHERE Setting = \"" . $setting . "\";";
+		$sql = $this->wpdb->prepare("SELECT Value FROM %i WHERE Setting = %s", [$this->tableName, $setting]);
 		$result = $this->wpdb->get_results($sql, ARRAY_N);
 
 
@@ -159,7 +159,7 @@ class databaseConnector {
 	 * @return stdClass return all Settings as a stdClass.
 	 */
 	public function getAllSettings(): stdClass {
-		$sql = "SELECT * FROM ".$this->tableName;
+		$sql = $this->wpdb->prepare("SELECT * FROM %i", $this->tableName);
 
 		$temp = $this->wpdb->get_results($sql, ARRAY_N);
 
@@ -181,7 +181,7 @@ class databaseConnector {
 	 * @return void
 	 */
 	public function saveSettingInDB( string $setting, string $settingsValue): void {
-		$sql = "UPDATE ".$this->tableName . " SET Value = '" . $settingsValue . "' WHERE Setting = '" . $setting . "';";
+		$sql = $this->wpdb->prepare("UPDATE %i SET Value = %s WHERE Setting = %s;", [$this->tableName, $settingsValue, $setting]);
 		$this->wpdb->query($sql);
 	}
 }
