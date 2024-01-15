@@ -91,11 +91,11 @@ class easyNewsletter{
 	 * @return void
 	 */
 	public static function addFarnCronService(): void {
-		//Not Available in light version
+		//Not Available
 	}
 
 	public static function updateFarnCronService(){
-        //Not Available in light version
+        //Not Available
         return false;
 	}
 

@@ -14,7 +14,7 @@ class htmlInjectionBox{
 		add_action( 'wp_ajax_en_htmlInjectionBoxDeleteElement', array($this, 'html_injection_box_delete_element_ajax_handler') );
 	}
 
-	function custom_html_injection_add_custom_box() {
+	function custom_html_injection_add_custom_box(): void {
 		add_meta_box(
 			'en_custom_HTML_injection_boxID',                 // Unique ID
 			__('Custom HTML Injection',"easynewsletter"),      // Box title
@@ -25,7 +25,7 @@ class htmlInjectionBox{
 	}
 
 
-	public function custom_html_injection_add_custom_box_html(\WP_Post $post){
+	public function custom_html_injection_add_custom_box_html(\WP_Post $post): void {
 		?>
 		<div>
 			<div class='en_customHtmlInjectionHolder'>
@@ -69,7 +69,10 @@ class htmlInjectionBox{
 		<?php
 
 	}
-	public function custom_html_injection_save_postdata( $post_id ) {
+	public function custom_html_injection_save_postdata( $post_id ): void {
+		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+			return;
+		}
 		if ( array_key_exists( 'customKey', $_POST ) &&  array_key_exists( 'connectedMetaField', $_POST )) {
 			if ($_POST["customKey"] == "") {
 				return;
@@ -84,8 +87,9 @@ class htmlInjectionBox{
 		}
 	}
 
-	public function html_injection_box_save_ajax_handler() {
+	public function html_injection_box_save_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+			echo json_encode(["status" => "fail"]);
 			wp_die();
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -102,11 +106,14 @@ class htmlInjectionBox{
 			serialize($metaField)
 		);
 
+		echo json_encode(["status" => "fail"]);
+
 		wp_die(); // All ajax handlers die when finished
 	}
 
-	public function html_injection_box_delete_element_ajax_handler() {
+	public function html_injection_box_delete_element_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+			echo json_encode(["status" => "fail"]);
 			wp_die();
 		}
 
@@ -122,6 +129,8 @@ class htmlInjectionBox{
 				serialize($metaField)
 			);
 		}
+
+		echo json_encode(["status" => "ok"]);
 
 		wp_die(); // All ajax handlers die when finished
 	}

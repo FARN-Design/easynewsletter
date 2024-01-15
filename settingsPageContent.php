@@ -36,6 +36,13 @@ if (isset($_REQUEST['submit'])){
         databaseConnector::instance()->saveSettingInDB($setting, $value);
     }
 
+	if (isset($_POST["removeCategory"])){
+		$targetGroups = unserialize(databaseConnector::instance()->getSettingFromDB("subscriberCategory"));
+		$index = array_search($_POST["category"], $targetGroups);
+		unset($targetGroups[$index]);
+		databaseConnector::instance()->saveSettingInDB("subscriberCategory", serialize($targetGroups));
+	}
+
     easyNewsletter::updateFarnCronService();
 
     //Page Reload in case of that the subscriber mode changed
@@ -44,13 +51,6 @@ if (isset($_REQUEST['submit'])){
 
 if (isset($_REQUEST["stopNewsletterSending"])){
     mailManager::instance()->stopNewsletterSending("Stopped");
-}
-
-if (isset($_POST["removeCategory"])){
-	$targetGroups = unserialize(databaseConnector::instance()->getSettingFromDB("subscriberCategory"));
-    $index = array_search($_POST["category"], $targetGroups);
-    unset($targetGroups[$index]);
-	databaseConnector::instance()->saveSettingInDB("subscriberCategory", serialize($targetGroups));
 }
 
 // create the checkboxes for signupFormFields
@@ -167,6 +167,7 @@ function generateTargetGroupsRoles(): string{
                 } ?>
             </tbody>
         </table>
+        <?php echo "<input type='hidden' name='wp_en_nonce' value='".wp_create_nonce()."'>"?>
         <input type="submit" class="button button-primary" name="submit" value="<?php _e("Save", 'easynewsletter')?>">
 
         <h3><?php _e("Press this Button to stop the Newsletter sending Process", 'easynewsletter')?></h3>

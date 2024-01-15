@@ -8,7 +8,7 @@ include "addAttachmentBox.php";
 include "htmlInjectionBox.php";
 class metaBoxes {
 
-	public static function addAllMetaBoxes(){
+	public static function addAllMetaBoxes(): void {
 		$metaBoxes = new metaBoxes();
 		add_action( "admin_enqueue_scripts", array($metaBoxes, "metaBoxesScripts"));
 
@@ -16,7 +16,7 @@ class metaBoxes {
 		new htmlInjectionBox();
 	}
 
-	public function metaBoxesScripts(){
+	public function metaBoxesScripts(): void {
 		//get current admin screen, or null
 		$screen = get_current_screen();
 		// verify admin screen object

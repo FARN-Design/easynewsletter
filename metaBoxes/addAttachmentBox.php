@@ -2,6 +2,8 @@
 
 namespace metaBoxes;
 
+use JetBrains\PhpStorm\NoReturn;
+
 class addAttachmentBox {
 
 	public function __construct() {
@@ -12,7 +14,7 @@ class addAttachmentBox {
 		add_action( 'wp_ajax_en_newsletterAttachmentBoxDeleteElement', array($this, 'newsletter_attachments_delete_element_ajax_handler') );
 	}
 
-	function attachment_add_custom_box() {
+	function attachment_add_custom_box(): void {
 		add_meta_box(
 			'en_attachment_boxID',                 // Unique ID
 			'Newsletter Attachment',      // Box title
@@ -23,7 +25,7 @@ class addAttachmentBox {
 	}
 
 
-	public function attachment_add_custom_box_html(\WP_Post $post){
+	public function attachment_add_custom_box_html(\WP_Post $post): void {
 		?>
 		<div>
 			<div class="en_newsletterAttachmentsHolder">
@@ -50,7 +52,10 @@ class addAttachmentBox {
 		</div>
 		<?php
 	}
-	public function attachment_save_postdata( $post_id ) {
+	public function attachment_save_postdata( $post_id ): void {
+		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+			return;
+		}
 		if ( array_key_exists( 'en_newsletter_attachment', $_POST )) {
 			if ($_POST["en_newsletter_attachment"] == "") {
 				return;
@@ -65,8 +70,9 @@ class addAttachmentBox {
 		}
 	}
 
-	public function newsletter_attachments_save_ajax_handler() {
+	public function newsletter_attachments_save_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+			echo json_encode(["status" => "fail"]);
 			wp_die();
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -79,11 +85,14 @@ class addAttachmentBox {
 			serialize($metaField)
 		);
 
+        echo json_encode(["status" => "ok"]);
+
 		wp_die(); // All ajax handlers die when finished
 	}
 
 	public function newsletter_attachments_delete_element_ajax_handler() {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+			echo json_encode(["status" => "fail"]);
 			wp_die();
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -97,6 +106,8 @@ class addAttachmentBox {
 			'en_newsletter_attachments',
 			serialize($metaField)
 		);
+
+		echo json_encode(["status" => "ok"]);
 
 		wp_die(); // All ajax handlers die when finished
 	}
