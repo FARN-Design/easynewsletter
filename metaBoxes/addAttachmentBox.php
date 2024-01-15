@@ -72,7 +72,7 @@ class addAttachmentBox {
 
 	public function newsletter_attachments_save_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
-			echo json_encode(["status" => "fail"]);
+			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -85,14 +85,14 @@ class addAttachmentBox {
 			serialize($metaField)
 		);
 
-        echo json_encode(["status" => "ok"]);
+        echo wp_json_encode(["status" => "ok"]);
 
 		wp_die(); // All ajax handlers die when finished
 	}
 
 	public function newsletter_attachments_delete_element_ajax_handler() {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
-			echo json_encode(["status" => "fail"]);
+			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -107,7 +107,7 @@ class addAttachmentBox {
 			serialize($metaField)
 		);
 
-		echo json_encode(["status" => "ok"]);
+		echo wp_json_encode(["status" => "ok"]);
 
 		wp_die(); // All ajax handlers die when finished
 	}

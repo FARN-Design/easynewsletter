@@ -4,6 +4,7 @@ namespace easyNewsletter;
 
 //handles the HTTP POST request from the settings page form.
 if (isset($_REQUEST['submit'])){
+    //TODO create an Array with all required parameters and not the whole request.
     $settingsValueMap = $_REQUEST;
     unset($settingsValueMap['page']);
     unset($settingsValueMap['submit']);

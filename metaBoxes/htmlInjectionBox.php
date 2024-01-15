@@ -89,7 +89,7 @@ class htmlInjectionBox{
 
 	public function html_injection_box_save_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
-			echo json_encode(["status" => "fail"]);
+			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
@@ -106,14 +106,14 @@ class htmlInjectionBox{
 			serialize($metaField)
 		);
 
-		echo json_encode(["status" => "fail"]);
+		echo wp_json_encode(["status" => "fail"]);
 
 		wp_die(); // All ajax handlers die when finished
 	}
 
 	public function html_injection_box_delete_element_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
-			echo json_encode(["status" => "fail"]);
+			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
 		}
 
@@ -130,7 +130,7 @@ class htmlInjectionBox{
 			);
 		}
 
-		echo json_encode(["status" => "ok"]);
+		echo wp_json_encode(["status" => "ok"]);
 
 		wp_die(); // All ajax handlers die when finished
 	}
