@@ -1554,7 +1554,7 @@ class simple_html_dom
 		$args = func_get_args();
 
 		if(($doc = call_user_func_array('file_get_contents', $args)) !== false) {
-			$this->load($doc, true);
+			$this->load($doc);
 		} else {
 			return false;
 		}

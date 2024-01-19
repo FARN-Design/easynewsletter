@@ -1,8 +1,7 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter;
 
-use mysql_xdevapi\Exception;
 use stdClass;
 use wpdb;
 

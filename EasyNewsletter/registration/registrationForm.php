@@ -13,7 +13,7 @@ if (isset($_REQUEST['submit'])){
         }
     }
 
-    if ( subscriberHandler::instance()->addNewSubscriber( $metaFields, false ) ){
+    if ( subscriberHandler::instance()->addNewSubscriber( $metaFields) ){
         //Linkt auf Success Page
         echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("registrationSuccessPageID"));
         return;
@@ -31,7 +31,7 @@ include ("registrationFormContent.php");
 $formContent = ob_get_contents();
 ob_end_clean();
 
-$content = str_replace("{{registrationForm}}", $formContent , $content,);
+$content = str_replace("{{registrationForm}}", $formContent , $content);
 
 echo $content;
 ?>

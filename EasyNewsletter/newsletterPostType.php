@@ -1,9 +1,10 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter;
 
-use metaBoxes\metaBoxes;
-use WpOrg\Requests\Exception;
+use easyNewsletter;
+use EasyNewsletter\metaBoxes\metaBoxes;
+use JetBrains\PhpStorm\NoReturn;
 
 include "metaBoxes/metaBoxes.php";
 
@@ -43,7 +44,7 @@ class newsletterPostType {
 
 		add_filter( 'single_template', array( $this,'en_pageTemplate') );
 
-		add_action("save_post_en_newsletters", array($this, "saveLastEditPost"), 10, 1);
+		add_action("save_post_en_newsletters", array($this, "saveLastEditPost"));
 
 		add_action('enqueue_block_editor_assets', array($this, 'remove_editor_styles_for_post_type'));
 
@@ -226,14 +227,6 @@ class newsletterPostType {
 			'type' => 'string',
 			"default" => serialize(array())
 		] );
-		//PostType is registered as String but will be converted to an array when first used in CustomMetaFieldConditionBox
-		//TODO Fix the registration to matching type Status = "active"
-		register_post_meta( 'en_newsletters', 'en_newsletter_customConditions', [
-			'show_in_rest' => true,
-			'single' => true,
-			'type' => 'string',
-			"default" => "",
-		] );
 	}
 
 	public static function convertContent($postID) : string{
@@ -263,72 +256,81 @@ class newsletterPostType {
 		$content = $content_post->post_content;
 		$enl_mailcontent_body = $content;
 
-		/* Convert Content */
+		try {
+			/* Convert Content */
 
-		$enl_mailcontent_body = apply_filters('the_content', $enl_mailcontent_body);
+			$enl_mailcontent_body = apply_filters( 'the_content', $enl_mailcontent_body );
 
-		include('resources/simple_html_dom.php');
+			// Cover
+			$enl_mailcontent_body = str_get_html( $enl_mailcontent_body );
+			foreach ( $enl_mailcontent_body->find( 'div.wp-block-cover' ) as $element ) {
+				// find Imagesource from img inside
+				$cover_imagesource      = $element->find( 'img.wp-block-cover__image-background', 0 )->src;
+				$elementstyle_converted = str_replace( 'min-height:', 'background-image:url(' . $cover_imagesource . ');background-size: auto 100%;background-position: center center;background-repeat: no-repeat;min-height:inherit;height:', $element->style );
+				$element->outertext     = '<div class="' . $element->class . '" style="' . $elementstyle_converted . '">' . $element->innertext . '</div>';
+			}
+			// Delete inner Cover Image img
+			$enl_mailcontent_body = str_get_html( $enl_mailcontent_body );
+			foreach ( $enl_mailcontent_body->find( 'img.wp-block-cover__image-background' ) as $element ) {
+				$element->outertext = '';
+			}
+			// Columns to Table
+			$enl_mailcontent_body = str_get_html( $enl_mailcontent_body );
+			foreach ( $enl_mailcontent_body->find( 'div.wp-block-columns' ) as $element ) {
+				if ( $element->hasClass( 'is-not-stacked-on-mobile' ) ) {
+				} else {
+					$element->addClass( 'is-stacked-on-mobile' );
+				}
+				$element->outertext = '<table class="' . $element->class . '"><tr>' . $element->innertext . '</tr></table>';
+			}
+			// Column to TD
+			$enl_mailcontent_body = str_get_html( $enl_mailcontent_body );
+			foreach ( $enl_mailcontent_body->find( 'div.wp-block-column' ) as $element ) {
+				$elementstyle_converted = str_replace( 'flex-basis:', 'width:', $element->style );
+				$element->outertext     = '<td class="' . $element->class . '" style="' . $elementstyle_converted . '">' . $element->innertext . '</td>';
+			}
+			/* switch figure to div */
+			$enl_mailcontent_body = str_replace( '<figure', '<div', $enl_mailcontent_body );
+			$enl_mailcontent_body = str_replace( '</figure>', '</div>', $enl_mailcontent_body );
 
-		// Cover
-		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
-		foreach ($enl_mailcontent_body->find('div.wp-block-cover') as $element) {
-		 // find Imagesource from img inside
-		 $cover_imagesource = $element->find('img.wp-block-cover__image-background', 0)->src;
-		 $elementstyle_converted = str_replace('min-height:', 'background-image:url('.$cover_imagesource.');min-height:inherit;height:', $element->style);
-		 $element->outertext = '<div class="'.$element->class.'" style="'.$elementstyle_converted.'">'.$element->innertext.'</div>';
-		}
-		// Delete inner Cover Image img
-		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
-		foreach ($enl_mailcontent_body->find('img.wp-block-cover__image-background') as $element) {
-		 $element->outertext = '';
-		}
-		// Columns to Table
-		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
-		foreach ($enl_mailcontent_body->find('div.wp-block-columns') as $element) {
-		 if($element->hasClass('is-not-stacked-on-mobile')){
-		 }else{
-		 	$element->addClass('is-stacked-on-mobile');
-		 }
-		 $element->outertext = '<table class="'.$element->class.'"><tr>'.$element->innertext.'</tr></table>';
-		}
-		// Column to TD
-		$enl_mailcontent_body = str_get_html($enl_mailcontent_body);
-		foreach ($enl_mailcontent_body->find('div.wp-block-column') as $element) {
-		 $elementstyle_converted = str_replace('flex-basis:', 'width:', $element->style);
-		 $element->outertext = '<td class="'.$element->class.'" style="'.$elementstyle_converted.'">'.$element->innertext.'</td>';
-		}
-		/* switch figure to div */
-		$enl_mailcontent_body = str_replace('<figure', '<div', $enl_mailcontent_body);
-		$enl_mailcontent_body = str_replace('</figure>', '</div>', $enl_mailcontent_body);
+			/* Build Full Mailcontent */
+			$enl_full_mailcontent = $enl_mailcontent_head . $enl_mailcontent_body . $enl_mailcontent_foot;
 
-		return $enl_mailcontent_head.$enl_mailcontent_body.$enl_mailcontent_foot;
+			/* Use CSSIN to inline all styles */
+			$cssin                        = new CSSIN();
+			$enl_full_mailcontent_inlined = $cssin->inlineCSS( $enl_full_mailcontent );
+
+			//return $enl_full_mailcontent;
+			return $enl_full_mailcontent_inlined;
+		} catch (Exception |\Error $e) {
+			farnLog::log("An error occurred while processing the mail content: " . $e->getMessage());
+			return "";
+		}
 	}
 
 	function enqueue_script() {
 		global $post_type;
 		if( 'en_newsletters' == $post_type ) {
-			wp_enqueue_script( 'newsletters-admin-edit-script', '/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources' . '/newslettersPostTypeAdmin.js' );
-			wp_enqueue_style( 'newsletters-admin-edit-style', '/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources/newslettersPostTypeAdmin.css' );
-			wp_enqueue_style( 'newsletters-admin-base-style', '/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources/newsletterBaseStyle.css' );
+			wp_enqueue_script( 'newsletters-admin-edit-script', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newslettersPostTypeAdmin.js' );
+			wp_enqueue_style( 'newsletters-admin-edit-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newslettersPostTypeAdmin.css' );
+			wp_enqueue_style( 'newsletters-admin-base-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newsletterBaseStyle.css' );
 			echo'<style>'.databaseConnector::instance()->getSettingFromDB("newsletterCSS").'</style>';
 		}
 	}
 
 	/* This removes the default editor styles css file defined in the wordpress theme */
-	function remove_editor_styles_for_post_type() {
+	function remove_editor_styles_for_post_type(): void {
 		global $post_type;
 		if( 'en_newsletters' == $post_type ) {
 	        remove_theme_support('editor-styles');
 	    }
 	}
 
-
-
 	/**
 	 * checks the number of subscribers and returns it to js
 	 *
 	 */
-	function en_wantToSendNewsletter(){
+	#[NoReturn] function en_wantToSendNewsletter(){
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
 		// prevent XSS
@@ -343,7 +345,7 @@ class newsletterPostType {
 	 * Sends Newsletter to all subscribers
 	 *
 	 */
-	function en_sendNewsletter(){
+	#[NoReturn] function en_sendNewsletter(){
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
 		// prevent XSS
@@ -368,7 +370,7 @@ class newsletterPostType {
 		farnLog::log("Started Newsletter sending process.");
 		farnLog::log("Current Newsletter: ". $newsletterTitle.", ID: ".$_POST["post_id"]);
 
-		easyNewsletter::updateFarnCronService();
+		$cron = easyNewsletter::updateFarnCronService();
 		wp_die();
 	}
 
@@ -376,7 +378,7 @@ class newsletterPostType {
 	 * Sends test mail to test mail subscriber specified in newsletter post type meta field 
 	 *
 	 */
-	function en_sendNewsletterTestMail(){
+	#[NoReturn] function en_sendNewsletterTestMail(){
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
 		// prevent XSS
@@ -399,7 +401,7 @@ class newsletterPostType {
 	 * defines the frontend page template view for newsletters, containing the real html that we send via mail
 	 *
 	 */
-	function en_pageTemplate($template) {
+	function en_pageTemplate($template): string {
 
 		global $post;
 		
@@ -410,7 +412,7 @@ class newsletterPostType {
 	
 	}
 
-	public function saveLastEditPost($post_id){
+	public function saveLastEditPost($post_id): void {
 		databaseConnector::instance()->saveSettingInDB("lastEditedNewsletterID", $post_id);
 	}
 

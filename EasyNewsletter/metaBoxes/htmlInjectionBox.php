@@ -1,8 +1,8 @@
 <?php
 
-namespace metaBoxes;
+namespace EasyNewsletter\metaBoxes;
 
-use easyNewsletter\metaDataWrapper;
+use EasyNewsletter\metaDataWrapper;
 
 class htmlInjectionBox{
 
@@ -20,7 +20,6 @@ class htmlInjectionBox{
 			__('Custom HTML Injection',"easynewsletter"),      // Box title
 			array($this,'custom_html_injection_add_custom_box_html'),  // Content callback, must be of type callable
 			"en_newsletters", // Post type
-			"advanced"
 		);
 	}
 

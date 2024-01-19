@@ -1,6 +1,6 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter;
 
 /**
  * This class handles everything related to the menu settings page.

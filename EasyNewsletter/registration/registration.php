@@ -1,6 +1,9 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter\registration;
+
+use easyNewsletter\databaseConnector;
+use easyNewsletter\mailManager;
 
 /**
  * This class handles everything related to the registration precess of a subscriber.

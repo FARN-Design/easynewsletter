@@ -1,6 +1,6 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter;
 
 class farnLog{
 

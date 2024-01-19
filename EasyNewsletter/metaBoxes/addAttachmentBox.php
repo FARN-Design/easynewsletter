@@ -1,8 +1,6 @@
 <?php
 
-namespace metaBoxes;
-
-use JetBrains\PhpStorm\NoReturn;
+namespace EasyNewsletter\metaBoxes;
 
 class addAttachmentBox {
 
@@ -20,7 +18,6 @@ class addAttachmentBox {
 			'Newsletter Attachment',      // Box title
 			array($this,'attachment_add_custom_box_html'),  // Content callback, must be of type callable
 			"en_newsletters", // Post type
-			"advanced"
 		);
 	}
 

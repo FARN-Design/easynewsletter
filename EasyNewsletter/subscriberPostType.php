@@ -1,6 +1,6 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter;
 
 use WP_Post;
 
@@ -35,7 +35,7 @@ class subscriberPostType {
 		add_action( 'manage_posts_custom_column',  array( $this,'addBackendSubscriberColumnsContent') );
 		add_action( 'transition_post_status', array($this, 'denyPrivateStatus'),10,3);
 
-		add_action( 'admin_footer', array( $this,'jsAjaxVariables' ));
+		//add_action( 'admin_footer', array( $this,'jsAjaxVariables' ));
 
 		add_action( 'admin_enqueue_scripts', array( $this,'enqueueSubscriberScriptsAndStyles') );
 		add_action( 'wp_ajax_saveBackendSubscriberCustomContent', array( $this,'saveBackendSubscriberCustomContent'));
@@ -110,8 +110,8 @@ class subscriberPostType {
 	public function enqueueSubscriberScriptsAndStyles(): void {
 		global $post_type;
 		if( 'en_subscribers' == $post_type ){
-			wp_enqueue_script( 'editSubscriberColumns-script', '/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources/editSubscriberColumns.js' );
-			wp_enqueue_style( 'editSubscriberColumns-style', '/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources/editSubscriberColumns.css' );
+			wp_enqueue_script( 'editSubscriberColumns-script', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/editSubscriberColumns.js' );
+			wp_enqueue_style( 'editSubscriberColumns-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/editSubscriberColumns.css' );
 		}
 	}
 
@@ -190,9 +190,9 @@ class subscriberPostType {
      */
 	function jsAjaxVariables(){ ?>
 	  <script type="text/javascript">
-		  var ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
-		  var ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
-	  </script>
+          const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
+          const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
+      </script>
 	<?php
 	}
 

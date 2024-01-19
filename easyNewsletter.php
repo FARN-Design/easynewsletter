@@ -12,19 +12,25 @@ Domain Path: resources/language
 License: GNU GENERAL PUBLIC LICENSE Version 3
 */
 
-namespace easyNewsletter;
-
 //-----------------------------Requirements-----------------------------
 
-require_once ('farnLog.php');
-require_once ('databaseConnector.php');
-require_once ('mailManager.php');
-require_once ('menuPage.php');
-require_once( 'registration/registration.php' );
-require_once ('subscriberPostType.php');
-require_once ('newsletterPostType.php');
-require_once ('metaDataWrapper.php');
-require_once ('subscriberHandler.php');
+use EasyNewsletter\databaseConnector;
+use EasyNewsletter\mailManager;
+use EasyNewsletter\menuPage;
+use EasyNewsletter\metaDataWrapper;
+use EasyNewsletter\newsletterPostType;
+use EasyNewsletter\registration\registration;
+use EasyNewsletter\subscriberPostType;
+
+require_once ('EasyNewsletter/farnLog.php');
+require_once ('EasyNewsletter/databaseConnector.php');
+require_once ('EasyNewsletter/mailManager.php');
+require_once ('EasyNewsletter/menuPage.php');
+require_once( 'EasyNewsletter/registration/registration.php' );
+require_once ('EasyNewsletter/subscriberPostType.php');
+require_once ('EasyNewsletter/newsletterPostType.php');
+require_once ('EasyNewsletter/metaDataWrapper.php');
+require_once ('EasyNewsletter/subscriberHandler.php');
 
 //-----------------------------Plugin Code-----------------------------
 
@@ -34,9 +40,6 @@ if (!defined('ABSPATH')){
 
 //Creates a new Object of the main class to initiate the plugin.
 new easyNewsletter();
-
-//TODO Checks for Updates Method
-//wp_update_plugins();
 
 //-----------------------------Main Class-----------------------------
 class easyNewsletter{
@@ -109,10 +112,8 @@ class easyNewsletter{
 	function enqueueJsxAssets(): void {
 		wp_enqueue_script(
 			'easy-newsletter-jsx-script',
-			'/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources/jsx/index.js',
+			'/wp-content/plugins/'.basename(dirname(__FILE__)).'/EasyNewsletter/resources/jsx/index.js',
 			[ 'wp-edit-post' ],
-			false,
-			false
 		);
 	}
 
@@ -122,14 +123,14 @@ class easyNewsletter{
 	 */
 	function jsAjaxVariables(){ ?>
 		<script type="text/javascript">
-            var ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
-            var ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
-		</script>
+            const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
+            const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
+        </script>
 		<?php
 	}
 
 	function my_plugin_init() {
-		load_plugin_textdomain( 'easynewsletter', false, basename(dirname(__FILE__)).'/resources/language' );
+		load_plugin_textdomain( 'easynewsletter', false, basename(dirname(__FILE__)).'/EasyNewsletter/resources/language' );
 	}
 
 }

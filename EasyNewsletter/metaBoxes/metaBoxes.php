@@ -1,8 +1,6 @@
 <?php
 
-namespace metaBoxes;
-
-use easyNewsletter\farnLog;
+namespace EasyNewsletter\metaBoxes;
 
 include "addAttachmentBox.php";
 include "htmlInjectionBox.php";

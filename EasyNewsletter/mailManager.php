@@ -1,6 +1,6 @@
 <?php
 
-namespace easyNewsletter;
+namespace EasyNewsletter;
 
 class mailManager {
 
@@ -204,8 +204,8 @@ class mailManager {
 		$postPermalink = get_permalink($registrationPageId);
 		$url = $postPermalink."?unsubscribed=true&email=" . $email . "&token=" . $token;
 		$url = str_replace('https://',"",$url);
-		$url = str_replace('http://',"",$url);
-		return $url;
+
+		return str_replace('http://',"",$url);
 	}
 
 	private function generateActivationURL($receiver, $token){
@@ -213,8 +213,8 @@ class mailManager {
 		$postPermalink = get_permalink($registrationPageId);
 		$url = $postPermalink."?confirmed=true&email=".$receiver."&token=".$token;
 		$url = str_replace('https://',"",$url);
-		$url = str_replace('http://',"",$url);
-		return $url;
+
+		return str_replace('http://',"",$url);
 	}
 
 	public function htmlInjection(String $htmlContent, $userID, $newsletterID): string{

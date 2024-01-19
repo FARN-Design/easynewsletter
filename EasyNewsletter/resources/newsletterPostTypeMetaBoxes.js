@@ -14,9 +14,9 @@
                 return;
             }
 
-            var ajax_data = {
-                action:  'en_htmlInjectionBoxSave',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_htmlInjectionBoxSave',
+                security: ajax_nonce,
                 customKey: customKey,
                 metaField: metaField,
                 post_ID: jQuery('#post_ID').val()
@@ -26,7 +26,7 @@
                 type : 'POST',
                 data: ajax_data,
             })
-                .done(function(data){
+                .done(function(){
                     $(".en_customHtmlInjectionHolder").append("" +
                         "<div>" +
                         "<input type='text' class='en_customHtmlInjectionKey' value='"+customKey+"' disabled>" +
@@ -39,8 +39,8 @@
                     $(".en_customHtmlInjectionMetaFieldInput").val("");
 
                 })
-                .fail(function(data){
-                    //TODO
+                .fail(function(){
+                    console.log("Error: While processing custom html injection.")
                 });
         })
 
@@ -51,9 +51,9 @@
             let metaField = $(this).siblings(".en_customHtmlInjectionMetaField").val()
             let parent = $(this).parent()
 
-            var ajax_data = {
-                action:  'en_htmlInjectionBoxDeleteElement',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_htmlInjectionBoxDeleteElement',
+                security: ajax_nonce,
                 customKey: customKey,
                 metaField: metaField,
                 post_ID: jQuery('#post_ID').val()
@@ -63,10 +63,10 @@
                 type : 'POST',
                 data: ajax_data,
             })
-                .done(function(data){
+                .done(function(){
                     parent.remove();
                 })
-                .fail(function(data){
+                .fail(function(){
                     console.error("Error while deleting");
                 });
         })
@@ -91,9 +91,9 @@
                 return;
             }
 
-            var ajax_data = {
-                action:  'en_metaFieldsBoxAND',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_metaFieldsBoxAND',
+                security: ajax_nonce,
                 metaField: metaField,
                 condition: condition,
                 value: value,
@@ -109,8 +109,8 @@
                    console.log(data)
                     window.setTimeout('location.reload()');
                 })
-                .fail(function(data){
-                    //TODO
+                .fail(function(){
+                    console.log("Error something went wrong while processing meta boxes")
                 });
         })
 
@@ -125,9 +125,9 @@
                 return;
             }
 
-            var ajax_data = {
-                action:  'en_metaFieldsBoxOR',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_metaFieldsBoxOR',
+                security: ajax_nonce,
                 metaField: metaField,
                 condition: condition,
                 value: value,
@@ -157,9 +157,9 @@
             let containerKey = $(this).parent().siblings(".en_containerKey").val()
             let parent = $(this).parent()
 
-            var ajax_data = {
-                action:  'en_metaFieldsBoxDeleteElement',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_metaFieldsBoxDeleteElement',
+                security: ajax_nonce,
                 metaField: metaField,
                 condition: condition,
                 value: value,
@@ -176,7 +176,7 @@
                     console.log(data)
                     parent.remove();
                 })
-                .fail(function(data){
+                .fail(function(){
                     console.error("Error while deleting");
                 });
         })
@@ -197,9 +197,9 @@
                 return;
             }
 
-            var ajax_data = {
-                action:  'en_newsletterAttachmentBoxSave',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_newsletterAttachmentBoxSave',
+                security: ajax_nonce,
                 attachmentURL: attachmentURL,
                 post_ID: jQuery('#post_ID').val()
             };
@@ -208,7 +208,7 @@
                 type : 'POST',
                 data: ajax_data,
             })
-                .done(function(data){
+                .done(function(){
                     $(".en_newsletterAttachmentsHolder").append("<div>" +
                         "<input disabled type='text' class='en_newsletterAttachmentURL' value='"+attachmentURL+"'>" +
                         "<button class='button en_delete_attachment'>Remove</button>" +
@@ -216,8 +216,8 @@
 
                     $(".en_newsletterAttachmentURL_input").val("")
                 })
-                .fail(function(data){
-                    //TODO
+                .fail(function(){
+                    console.log("Error: Something went wrong in the attachment box")
                 });
         })
 
@@ -227,9 +227,9 @@
             let attachmentURL = $(this).siblings(".en_newsletterAttachmentURL").val()
             let parent = $(this).parent()
 
-            var ajax_data = {
-                action:  'en_newsletterAttachmentBoxDeleteElement',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'en_newsletterAttachmentBoxDeleteElement',
+                security: ajax_nonce,
                 attachmentURL: attachmentURL,
                 post_ID: jQuery('#post_ID').val()
             };
@@ -242,7 +242,7 @@
                     console.log(data)
                     parent.remove();
                 })
-                .fail(function(data){
+                .fail(function(){
                     console.error("Error while deleting");
                 });
         })

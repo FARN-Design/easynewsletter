@@ -2,7 +2,7 @@ jQuery(document).ready(function($) {
 
     // click on "edit"-Button
     $(document).on('click','.edit_button', function() {
-        var column = $(this).parent();
+        const column = $(this).parent();
         // show input field, exit-button and save button
         if(!column.hasClass('edit_active')){
             column.addClass('edit_active'); 
@@ -13,8 +13,8 @@ jQuery(document).ready(function($) {
     // click on "exit"-Button
     $(document).on('click','.exit_button', function() {
         // close everything and don't save
-        var column = $(this).parent();
-        var column_content = column.find('.column_content').html();
+        const column = $(this).parent();
+        const column_content = column.find('.column_content').html();
         column.find('.edit_input input').val(column_content);
         column.removeClass('edit_active');
     });
@@ -22,20 +22,20 @@ jQuery(document).ready(function($) {
     // click on "save"-Button
     $(document).on('click','.save_button', function() {
         // get all values for ajax-save-function
-        var column = $(this).parent();
-        var post_id = column.parent().attr('id').replace('post-','');
-        var field_name = column.find('.column_content').attr('data-field-name');
-        var column_content = column.find('.edit_input input').val();
-        var field_type = 'input';
+        const column = $(this).parent();
+        const post_id = column.parent().attr('id').replace('post-', '');
+        const field_name = column.find('.column_content').attr('data-field-name');
+        const column_content = column.find('.edit_input input').val();
+        const field_type = 'input';
         // hide input, exit-button and save-button
         column.removeClass('edit_active');
         // set column_content-html
         column.find('.column_content').html(column_content);
 
         // save field to database via ajax
-        var ajax_data = {
-            action:  'saveBackendSubscriberCustomContent',
-            security:  ajax_nonce,
+        const ajax_data = {
+            action: 'saveBackendSubscriberCustomContent',
+            security: ajax_nonce,
             content: column_content,
             post_id: post_id,
             field_name: field_name,
@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
             type : 'POST',
             data: ajax_data,
         })
-        .done(function(data){
+        .done(function(){
             console.log('Done');
         })
         .fail(function(){
@@ -75,9 +75,9 @@ jQuery(document).ready(function($) {
             const username = $(".en_input_user").val()
             const email = $(".en_input_email").val()
 
-            var ajax_data = {
-                action:  'addBackendSubscriber',
-                security:  ajax_nonce,
+            const ajax_data = {
+                action: 'addBackendSubscriber',
+                security: ajax_nonce,
                 username: username,
                 email: email
             };
@@ -94,7 +94,7 @@ jQuery(document).ready(function($) {
                     button.after("<span style='margin-left: 20px' class='en_feedback'>"+data+"</span>")
                     location.reload();
                 })
-                .fail(function(data){
+                .fail(function(){
                     button.after("<p class='en_feedback'>This email is already registered!</p>")
                 });
         }
