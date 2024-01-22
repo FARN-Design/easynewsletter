@@ -170,7 +170,7 @@ class subscriberPostType {
                 case 'en_lastReceived':
                 case 'en_token':
                 case 'en_doubleOptIn':
-                    echo "<div>".get_post_meta($post->ID, $columnName, true)."</div>";
+                    echo "<div>".esc_attr(get_post_meta($post->ID, $columnName, true))."</div>";
                     break;
                 default:
 	                $columnValue = get_post_meta($post->ID, $columnName, true);
@@ -182,7 +182,7 @@ class subscriberPostType {
 	                $columnContent .= "<div class='edit_button dashicons-before dashicons-edit' title='bearbeiten'></div>";
 	                $columnContent .= "<div class='save_button dashicons-before dashicons-saved' title='speichern'></div>";
 	                $columnContent .= "<div class='exit_button dashicons-before dashicons-no-alt' title='abbrechen'></div>";
-	                echo $columnContent;
+	                echo esc_html($columnContent);
             }
         }
 	}

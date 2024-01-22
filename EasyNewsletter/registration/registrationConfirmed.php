@@ -15,6 +15,7 @@ while ($query->have_posts()){
 
 	if (get_post_meta( get_the_ID(),"en_eMailAddress", true) == $email){
 		if (get_post_meta( get_the_ID(),"en_token", true) == $token){
+			//No escape because we want to get the raw value
 			echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("confirmationSuccessPageID"));
 			update_post_meta(get_the_ID(), "en_doubleOptIn", "confirmed");
 			update_post_meta(get_the_ID(), "en_status", "active");
@@ -24,4 +25,5 @@ while ($query->have_posts()){
 	}
 }
 farnLog::log("Could not confirm Registration: Invalid Email: ".$email);
+//No escape because we want to get the raw value
 echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("confirmationDeniedPageID"));

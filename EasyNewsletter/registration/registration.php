@@ -208,7 +208,7 @@ class registration {
 		if (isset($_GET["submit"]) && isset($email)){
 			try {
 				mailManager::instance()->sendUnsubscribeMail($email);
-				echo "<div class='en_unsubscribeFromSuccessMessageContainer'><p>Unsubscribe e-mail send to: ".$email."</p></div>";
+				echo "<div class='en_unsubscribeFromSuccessMessageContainer'><p>Unsubscribe e-mail send to: ".esc_attr($email)."</p></div>";
 			} catch ( Error | Exception $e){
 				echo "<div class='en_unsubscribeFromErrorMessageContainer'><p>The e-mail was not found in out mailing list!</p></div>";
 				farnLog::log("Error: ".$e->getMessage());

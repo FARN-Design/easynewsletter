@@ -126,7 +126,7 @@ class newsletterPostType {
 	public function addBackendNewsletterColumnsContent( string $column ): void {
 		global $post;
 		if ($column == 'en_alreadySend'){
-			echo get_post_meta($post->ID, 'en_alreadySend', true);
+			echo esc_attr(get_post_meta($post->ID, 'en_alreadySend', true));
 		}
 	}
 
@@ -335,7 +335,7 @@ class newsletterPostType {
 			wp_enqueue_script( 'newsletters-admin-edit-script', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newslettersPostTypeAdmin.js' );
 			wp_enqueue_style( 'newsletters-admin-edit-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newslettersPostTypeAdmin.css' );
 			wp_enqueue_style( 'newsletters-admin-base-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newsletterBaseStyle.css' );
-			echo'<style>'.databaseConnector::instance()->getSettingFromDB("newsletterCSS").'</style>';
+			echo'<style>'.esc_attr(databaseConnector::instance()->getSettingFromDB("newsletterCSS")).'</style>';
 		}
 	}
 
@@ -357,7 +357,7 @@ class newsletterPostType {
 		// prevent XSS
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		echo count(mailManager::instance()->getAllNewsletterReceiverIDsAsArray($_POST["post_id"]));
+		echo esc_attr(count(mailManager::instance()->getAllNewsletterReceiverIDsAsArray($_POST["post_id"])));
 
 		wp_die();
 	}
@@ -377,7 +377,7 @@ class newsletterPostType {
 		( $sendingInProgress == "true" ) ? $sendingInProgress = true : $sendingInProgress = false;
 
 		if ($sendingInProgress){
-			echo __("sendingInProgress","easynewsletter");
+			echo esc_attr__("sendingInProgress","easynewsletter");
 			wp_die();
 		}
 
@@ -411,7 +411,7 @@ class newsletterPostType {
 			$receiver = get_post_meta($_POST["post_id"],"en_test_emailaddress", true);
 			$attachments = mailManager::instance()->generateAttachments(unserialize(get_post_meta($_POST["post_id"], "en_newsletter_attachments", true)));
 			mailManager::instance()->sendMail($receiver, $subject, $content, $attachments);
-			echo __("Receiver:", "easynewsletter")." ".$receiver;
+			echo esc_attr__("Receiver:", "easynewsletter")." ".$receiver;
 		} catch (Exception | \Error $e) {
 			farnLog::log("Something went wrong while sending the test mail: $e");
 		}

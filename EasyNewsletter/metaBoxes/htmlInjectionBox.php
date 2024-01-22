@@ -36,14 +36,14 @@ class htmlInjectionBox{
 					$array = unserialize(get_post_meta($post->ID, "en_custom_html_injection", true));
 					foreach ($array as $key => $value){
 						echo "<div>" .
-						     "<input type='text' class='en_customHtmlInjectionKey' disabled value='".$key."'>" .
+						     "<input type='text' class='en_customHtmlInjectionKey' disabled value='".esc_attr($key)."'>" .
 						     " => " .
-						     "<input type='text' class='en_customHtmlInjectionMetaField' disabled value='".$value."'>" .
-						     "<button class='button en_delete_custom_html_injection'>".__('Remove','easynewsletter')."</button>" .
+						     "<input type='text' class='en_customHtmlInjectionMetaField' disabled value='".esc_attr($value)."'>" .
+						     "<button class='button en_delete_custom_html_injection'>".esc_attr__('Remove','easynewsletter')."</button>" .
 						     "</div>";
 					}
 					if (empty($array)){
-						echo "<p>".__('No custom Injections defined.',"easynewsletter")."</p>";
+						echo "<p>".esc_attr__('No custom Injections defined.',"easynewsletter")."</p>";
 					}
 					?>
 				</div>
@@ -59,7 +59,7 @@ class htmlInjectionBox{
 						<?php
 						$availableMetaFields = metaDataWrapper::$availableMetaFieldsForCustomHtmlInjection;
 						foreach ($availableMetaFields as $key => $value){
-							echo "<option value='".$key."'>".$key."</option>";
+							echo "<option value='".esc_attr($key)."'>".esc_attr($key)."</option>";
 						}
 						?>
 					</select>
@@ -100,7 +100,7 @@ class htmlInjectionBox{
 
 		$metaField = unserialize(get_post_meta($_POST["post_ID"], "en_custom_html_injection", true));
 
-		echo $_POST["metaField"];
+		echo esc_attr($_POST["metaField"]);
 
 		$metaField[$_POST["customKey"]] = $_POST["metaField"];
 

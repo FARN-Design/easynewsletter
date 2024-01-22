@@ -94,21 +94,21 @@ function getSubscribersLink(): string{
             </td>
             <td>
                 <div>
-                    <p>All Newsletter Subscriber count: <?php echo getNewsletterSubscriberCount();?></p>
-                    <p>Active Newsletter Subscriber count: <?php echo getActiveNewsletterSubscriberCount();?></p>
+                    <p>All Newsletter Subscriber count: <?php echo esc_attr(getNewsletterSubscriberCount());?></p>
+                    <p>Active Newsletter Subscriber count: <?php echo esc_attr(getActiveNewsletterSubscriberCount());?></p>
                 </div>
             </td>
             <td>
                 <div>
                     <p>Newsletter sending Progress: <?php echo getSendingInProgressStatus();?></p>
-                    <p>Current Newsletter sending: <?php echo getActiveSendingNewsletter();?></p>
-                    <p>Current Subscriber Mode: <?php echo getSubscriberMode();?></p>
+                    <p>Current Newsletter sending: <?php echo esc_attr(getActiveSendingNewsletter());?></p>
+                    <p>Current Subscriber Mode: <?php echo esc_attr(getSubscriberMode());?></p>
                 </div>
             </td>
         </tr>
         <tr>
             <td><a class="button-primary" href="/wp-admin/edit.php?post_type=en_newsletters"><?php _e("To All Newsletter", "easynewsletter");?></a></td>
-            <td><a class="button-primary" href="<?php echo getSubscribersLink();?>"><?php _e("To All Subscribers", "easynewsletter");?></a></td>
+            <td><a class="button-primary" href="<?php echo esc_attr(getSubscribersLink());?>"><?php _e("To All Subscribers", "easynewsletter");?></a></td>
             <td><a class="button-primary" href="/wp-admin/admin.php?page=easyNewsletterSettings"><?php _e("To Settings", "easynewsletter");?></a></td>
         </tr>
         </tbody>

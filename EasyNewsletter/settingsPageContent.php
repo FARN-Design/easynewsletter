@@ -66,24 +66,24 @@ function createCheckboxes($signupFormFieldsValue): string {
     // create all checkboxes
     $checkboxesFrontendHtml = "";
     foreach($checkboxesValues as $checkboxVar => $checkboxValue){
-        $checkboxesFrontendHtml .= "<input type='checkbox' name='signupFormFields[]' value='" . $checkboxVar ."'";
+        $checkboxesFrontendHtml .= "<input type='checkbox' name='signupFormFields[]' value='" . esc_attr($checkboxVar) ."'";
         // check, if a specific signupFormFields-checkbox should be checked
         if($checkboxesActive !== false && in_array($checkboxVar,$checkboxesActive)){
             $checkboxesFrontendHtml .=  "checked='checked'"; 
         }
         match ($checkboxValue){
-            "Salutation" => $checkboxesFrontendHtml .= ">" . __("Salutation", "easynewsletter") ."<br>",
-            "Gender" => $checkboxesFrontendHtml .= ">" . __("Gender", "easynewsletter") ."<br>",
-            "First Name" => $checkboxesFrontendHtml .= ">" . __("First Name", "easynewsletter") ."<br>",
-            "Last Name" => $checkboxesFrontendHtml .= ">" . __("Last Name", "easynewsletter") ."<br>",
-            "Telephone Number" => $checkboxesFrontendHtml .= ">" . __("Telephone Number", "easynewsletter") ."<br>",
-            default => $checkboxesFrontendHtml .= ">" . $checkboxValue ."<br>"
+            "Salutation" => $checkboxesFrontendHtml .= ">" . esc_attr__("Salutation", "easynewsletter") ."<br>",
+            "Gender" => $checkboxesFrontendHtml .= ">" . esc_attr__("Gender", "easynewsletter") ."<br>",
+            "First Name" => $checkboxesFrontendHtml .= ">" . esc_attr__("First Name", "easynewsletter") ."<br>",
+            "Last Name" => $checkboxesFrontendHtml .= ">" . esc_attr__("Last Name", "easynewsletter") ."<br>",
+            "Telephone Number" => $checkboxesFrontendHtml .= ">" . esc_attr__("Telephone Number", "easynewsletter") ."<br>",
+            default => $checkboxesFrontendHtml .= ">" . esc_attr($checkboxValue) ."<br>"
         };
 
     }
     // add eMailAddress-checkbox, which is required and can not be unchecked (has disabled parameter) 
     // notice, that there is a hidden input field. That is needed, because disabled checkboxes dont return their values
-    $checkboxesFrontendHtml .= "<input type='checkbox' name='signupFormFields[]' value='en_eMailAddress' checked='checked' disabled>".__("Email Address","easynewsletter")."<br><input type='hidden' name='signupFormFields[]' value='en_eMailAddress' checked='checked'>";
+    $checkboxesFrontendHtml .= "<input type='checkbox' name='signupFormFields[]' value='en_eMailAddress' checked='checked' disabled>".esc_attr__("Email Address","easynewsletter")."<br><input type='hidden' name='signupFormFields[]' value='en_eMailAddress' checked='checked'>";
 
 	return $checkboxesFrontendHtml;
 }
@@ -101,12 +101,12 @@ function generateTargetGroupsCategory(): string{
         if ($target_group_category == ""){
             continue;
         }
-        $outputString .= "<li>" . $target_group_category . "<form>" .
-                         "<input type='hidden' value='".$target_group_category."' name='category'>" .
+        $outputString .= "<li>" . esc_attr($target_group_category) . "<form>" .
+                         "<input type='hidden' value='".esc_attr($target_group_category)."' name='category'>" .
                          "<input style=' transform: translate(5px,-7.5px);scale: 90%;' class='button-secondary' type='submit' name='removeCategory' value='delete'>" .
                          "</form></li>";
     }
-    return $outputString." <li><input type='text' name='subscriberCategory' id='subscriberCategory' placeholder='".__("Add new category", 'easynewsletter')."'></li></ul>";
+    return $outputString." <li><input type='text' name='subscriberCategory' id='subscriberCategory' placeholder='".esc_attr__("Add new category", 'easynewsletter')."'></li></ul>";
 }
 
 function generateTargetGroupsRoles(): string{
@@ -115,12 +115,12 @@ function generateTargetGroupsRoles(): string{
 	foreach ($targetGroupsRole as $target_group_role){
 		$outputString .= "<li>" . $target_group_role . "</li>";
 	}
-	return $outputString." <li><input type='text' name='subscriberRole' id='subscriberRole' placeholder='".__("Add new role", 'easynewsletter')."'></li></ul>";
+	return $outputString." <li><input type='text' name='subscriberRole' id='subscriberRole' placeholder='".esc_html__("Add new role", 'easynewsletter')."'></li></ul>";
 }
 
 ?>
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php _e("Easy Newsletter Settings", "easynewsletter");?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e("Easy Newsletter Settings", "easynewsletter");?></h1>
     <hr class="wp-header-end">
     <form method="post" name="easyNewsletterSettings" id="easyNewsletterSettings">
         <table class="form-table">
@@ -130,34 +130,34 @@ function generateTargetGroupsRoles(): string{
                 foreach ($allSettings as $setting => $value){
                     echo "<tr class='user-rich-editing-wrap'>";
                     echo match ($setting){
-                        'senderEmailAddress' => "<th scope='row'>".__("Sender email address", 'easynewsletter')."</th>",
-                        'senderName' => "<th scope='row'>".__("Sender email name", 'easynewsletter')."</th>",
-                        'replyTo' => "<th scope='row'>".__("Reply to email address", 'easynewsletter')."</th>",
-                        'maxEmailPerInterval' => "<th scope='row'>".__("Max send email per interval", 'easynewsletter')."</th>",
-                        'intervalInSeconds' => "<th scope='row'>".__("Interval in seconds", 'easynewsletter')."</th>",
-                        'signupFormFields' => "<th scope='row'>".__("Signup form fields", 'easynewsletter')."</th>",
-                        'activeNewsletter' => "<th scope='row'>".__("Currently active newsletter", 'easynewsletter')."</th>",
-                        'activeNewsletterID' => "<th scope='row'>".__("Currently active newsletter ID", 'easynewsletter')."</th>",
-                        'subscriberMode' => "<th scope='row'>".__("Selected Mode", 'easynewsletter')."</th>",
-                        'sendingInProgress' => "<th scope='row'>".__("Sending in progress", 'easynewsletter')."</th>",
-                        'standardActivationPost' => "<th scope='row'>".__("Standard activation post ID", 'easynewsletter')."</th>",
-                        'standardUnsubscribePost' => "<th scope='row'>".__("Standard unsubscribe post ID", 'easynewsletter')."</th>",
-                        'standardWelcomePost' => "<th scope='row'>".__("Standard welcome post ID", 'easynewsletter')."</th>",
-                        'subscriberCategory' => "<th scope='row'>".__("Available subscriber category", 'easynewsletter')."</th>",
-                        'subscriberRole' => "<th scope='row'>".__("Available subscriber roles", 'easynewsletter')."</th>",
-                        'newsletterCSS' => "<th scope='row'>".__("Custom newsletter CSS", 'easynewsletter')."</th>",
-                        'addedUserRoleKey' => "<th scope='row'>".__("New user role key", 'easynewsletter')."</th>",
-                        'registrationPageID' => "<th scope='row'>".__("Registration page id", 'easynewsletter')."</th>",
-                        'registrationSuccessPageID' => "<th scope='row'>".__("Registration success page id", 'easynewsletter')."</th>",
-                        'confirmationSuccessPageID' => "<th scope='row'>".__("Confirmation success page id", 'easynewsletter')."</th>",
-                        'confirmationDeniedPageID' => "<th scope='row'>".__("Confirmation denied page id", 'easynewsletter')."</th>",
-                        'unsubscribedPageID' => "<th scope='row'>".__("Unsubscribed page id", 'easynewsletter')."</th>",
-                        'registrationFormPageID' => "<th scope='row'>".__("Registration form page id", 'easynewsletter')."</th>",
-                        default => "<th scope='row'>".$setting."</th>",};
-                    echo "<td> <label for='".$setting."'>";
+                        'senderEmailAddress' => "<th scope='row'>".esc_attr__("Sender email address", 'easynewsletter')."</th>",
+                        'senderName' => "<th scope='row'>".esc_attr__("Sender email name", 'easynewsletter')."</th>",
+                        'replyTo' => "<th scope='row'>".esc_attr__("Reply to email address", 'easynewsletter')."</th>",
+                        'maxEmailPerInterval' => "<th scope='row'>".esc_attr__("Max send email per interval", 'easynewsletter')."</th>",
+                        'intervalInSeconds' => "<th scope='row'>".esc_attr__("Interval in seconds", 'easynewsletter')."</th>",
+                        'signupFormFields' => "<th scope='row'>".esc_attr__("Signup form fields", 'easynewsletter')."</th>",
+                        'activeNewsletter' => "<th scope='row'>".esc_attr__("Currently active newsletter", 'easynewsletter')."</th>",
+                        'activeNewsletterID' => "<th scope='row'>".esc_attr__("Currently active newsletter ID", 'easynewsletter')."</th>",
+                        'subscriberMode' => "<th scope='row'>".esc_attr__("Selected Mode", 'easynewsletter')."</th>",
+                        'sendingInProgress' => "<th scope='row'>".esc_attr__("Sending in progress", 'easynewsletter')."</th>",
+                        'standardActivationPost' => "<th scope='row'>".esc_attr__("Standard activation post ID", 'easynewsletter')."</th>",
+                        'standardUnsubscribePost' => "<th scope='row'>".esc_attr__("Standard unsubscribe post ID", 'easynewsletter')."</th>",
+                        'standardWelcomePost' => "<th scope='row'>".esc_attr__("Standard welcome post ID", 'easynewsletter')."</th>",
+                        'subscriberCategory' => "<th scope='row'>".esc_attr__("Available subscriber category", 'easynewsletter')."</th>",
+                        'subscriberRole' => "<th scope='row'>".esc_attr__("Available subscriber roles", 'easynewsletter')."</th>",
+                        'newsletterCSS' => "<th scope='row'>".esc_attr__("Custom newsletter CSS", 'easynewsletter')."</th>",
+                        'addedUserRoleKey' => "<th scope='row'>".esc_attr__("New user role key", 'easynewsletter')."</th>",
+                        'registrationPageID' => "<th scope='row'>".esc_attr__("Registration page id", 'easynewsletter')."</th>",
+                        'registrationSuccessPageID' => "<th scope='row'>".esc_attr__("Registration success page id", 'easynewsletter')."</th>",
+                        'confirmationSuccessPageID' => "<th scope='row'>".esc_attr__("Confirmation success page id", 'easynewsletter')."</th>",
+                        'confirmationDeniedPageID' => "<th scope='row'>".esc_attr__("Confirmation denied page id", 'easynewsletter')."</th>",
+                        'unsubscribedPageID' => "<th scope='row'>".esc_attr__("Unsubscribed page id", 'easynewsletter')."</th>",
+                        'registrationFormPageID' => "<th scope='row'>".esc_attr__("Registration form page id", 'easynewsletter')."</th>",
+                        default => "<th scope='row'>".esc_attr($setting)."</th>",};
+                    echo "<td> <label for='".esc_attr($setting)."'>";
 	                echo match ( $setting ) {
-		                'senderEmailAddress', 'replyTo' => "<input type='email' name='" . $setting . "' id='" . $setting . "' value='" . $value . "'>",
-		                'maxEmailPerInterval', 'intervalInSeconds' => "<input type='number' name='" . $setting . "' id='" . $setting . "' value='" . $value . "'>",
+		                'senderEmailAddress', 'replyTo' => "<input type='email' name='" . esc_attr($setting) . "' id='" . esc_attr($setting) . "' value='" . esc_attr($value) . "'>",
+		                'maxEmailPerInterval', 'intervalInSeconds' => "<input type='number' name='" . esc_attr($setting) . "' id='" . esc_attr($setting) . "' value='" . esc_attr($value) . "'>",
                         'signupFormFields' => createCheckboxes($value),
                         'subscriberMode' => generateModeSelection(),
                         'sendingInProgress', 'activeNewsletter', 'activeNewsletterID' => "<input type='text' name='" . $setting . "' id='" . $setting . "' value='" . $value . "' disabled>",

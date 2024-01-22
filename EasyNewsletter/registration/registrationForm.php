@@ -14,12 +14,13 @@ if (isset($_REQUEST['submit'])){
     }
 
     if ( subscriberHandler::instance()->addNewSubscriber( $metaFields) ){
-        //Linkt auf Success Page
+	    //No escape because we want to get the raw value
+		//Linkt auf Success Page
         echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("registrationSuccessPageID"));
         return;
     }
     else{
-        echo "<h3>".__("Email already in use!", "easynewsletter")."</h3>";
+        echo "<h3>".esc_attr__("Email already in use!", "easynewsletter")."</h3>";
     }
 }
 
@@ -33,4 +34,5 @@ ob_end_clean();
 
 $content = str_replace("{{registrationForm}}", $formContent , $content);
 
+//No escape because we want to get the raw content
 echo $content;

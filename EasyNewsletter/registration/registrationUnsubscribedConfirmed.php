@@ -9,7 +9,7 @@ $token = $_GET["token"];
 if ( databaseConnector::instance()->getSettingFromDB( 'subscriberMode' ) == 'user' ) {
 	$user = get_user_by( 'email', $email );
 	if ( get_user_meta( $user->ID, "en_token", true ) == $token ) {
-		echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("unsubscribedConfirmedPageID"));
+		echo esc_attr(get_the_content("", false, databaseConnector::instance()->getSettingFromDB("unsubscribedConfirmedPageID")));
 		update_user_meta( $user->ID, "en_doubleOptIn", "inactive" );
 		update_user_meta( $user->ID, "en_status", "unsubscribed" );
 	} else {
@@ -25,7 +25,7 @@ if ( databaseConnector::instance()->getSettingFromDB( 'subscriberMode' ) == 'use
 
 		if ( get_post_meta( get_the_ID(), "en_eMailAddress", true ) == $email ) {
 			if ( get_post_meta( get_the_ID(), "en_token", true ) == $token ) {
-				echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("unsubscribedConfirmedPageID"));
+				echo esc_attr(get_the_content("", false, databaseConnector::instance()->getSettingFromDB("unsubscribedConfirmedPageID")));
 				update_post_meta( get_the_ID(), "en_doubleOptIn", "inactive" );
 				update_post_meta( get_the_ID(), "en_status", "unsubscribed" );
 			} else {
