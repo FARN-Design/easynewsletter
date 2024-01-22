@@ -4,9 +4,13 @@ namespace EasyNewsletter;
 
 use easyNewsletter;
 use EasyNewsletter\metaBoxes\metaBoxes;
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
+use resources\vendor\cssin\CSSIN;
 
 include "metaBoxes/metaBoxes.php";
+include "resources/vendor/simple_html_dom/simple_html_dom.php";
+include "resources/vendor/cssin/CSSIN.php";
 
 /**
  * This class handles everything related to the newsletter Posttype
@@ -114,11 +118,12 @@ class newsletterPostType {
 
 	/**
 	 * Adds content to each colum per post in the newsletter PostType.
+	 *
 	 * @param $column string The column name where content needs to be added.
 	 *
 	 * @return void
 	 */
-	public function addBackendNewsletterColumnsContent( $column ): void {
+	public function addBackendNewsletterColumnsContent( string $column ): void {
 		global $post;
 		if ($column == 'en_alreadySend'){
 			echo get_post_meta($post->ID, 'en_alreadySend', true);
@@ -230,18 +235,18 @@ class newsletterPostType {
 	}
 
 	public static function convertContent($postID) : string{
-		$enl_mailcontent_head = '<html>
+		$enl_mailcontent_head = '<!DOCTYPE html><html>
 		<head>
 			<meta content="text/html;charset=UTF-8" http-equiv="Content-Type">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 		  	<meta name="format-detection" content="telephone=no">
 		  	<meta name="color-scheme" content="light">
 			<meta name="supported-color-schemes" content="light">
-		<style>
-			'.file_get_contents( get_site_url()."/wp-includes/css/dist/block-library/style.min.css" ).'
-			'.file_get_contents( __DIR__ . "/resources/newsletterBaseStyle.css" ).'
-			'.databaseConnector::instance()->getSettingFromDB("newsletterCSS").'
-		</style>
+			<style type="text/css">
+				'.file_get_contents( __DIR__ . "/resources/newsletterBlocklibraryStyle.css" ).'
+				'.file_get_contents( __DIR__ . "/resources/newsletterBaseStyle.css" ).'
+				'.databaseConnector::instance()->getSettingFromDB("newsletterCSS").'
+			</style>
 		</head>
 		<body>
 			<div style="display:none;" class="en_previewtext">'.get_post_meta($postID,"en_excerpt", true).'</div>
@@ -289,6 +294,22 @@ class newsletterPostType {
 				$elementstyle_converted = str_replace( 'flex-basis:', 'width:', $element->style );
 				$element->outertext     = '<td class="' . $element->class . '" style="' . $elementstyle_converted . '">' . $element->innertext . '</td>';
 			}
+			// Image
+			$enl_mailcontent_body = str_get_html( $enl_mailcontent_body );
+			foreach ( $enl_mailcontent_body->find( 'figure.wp-block-image img' ) as $element ) {
+
+				$image_style_array = explode(";", $element->style);
+
+				foreach($image_style_array as $image_style_attr) {
+				    $image_style_attr_arr = explode(':', $image_style_attr);
+				    $image_style_final_arr[array_shift($image_style_attr_arr)] = $image_style_attr_arr;
+				}
+
+				$image_width=(int)$image_style_final_arr['width'][0];
+				$image_height=(int)$image_style_final_arr['height'][0];
+				$element->setAttribute('width', $image_width);
+				$element->setAttribute('height', $image_height);
+			}
 			/* switch figure to div */
 			$enl_mailcontent_body = str_replace( '<figure', '<div', $enl_mailcontent_body );
 			$enl_mailcontent_body = str_replace( '</figure>', '</div>', $enl_mailcontent_body );
@@ -304,7 +325,7 @@ class newsletterPostType {
 			return $enl_full_mailcontent_inlined;
 		} catch (Exception |\Error $e) {
 			farnLog::log("An error occurred while processing the mail content: " . $e->getMessage());
-			return "";
+			return "No Content";
 		}
 	}
 
@@ -330,7 +351,7 @@ class newsletterPostType {
 	 * checks the number of subscribers and returns it to js
 	 *
 	 */
-	#[NoReturn] function en_wantToSendNewsletter(){
+	#[NoReturn] function en_wantToSendNewsletter(): void {
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
 		// prevent XSS
@@ -345,7 +366,7 @@ class newsletterPostType {
 	 * Sends Newsletter to all subscribers
 	 *
 	 */
-	#[NoReturn] function en_sendNewsletter(){
+	#[NoReturn] function en_sendNewsletter(): void {
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
 		// prevent XSS
@@ -378,20 +399,23 @@ class newsletterPostType {
 	 * Sends test mail to test mail subscriber specified in newsletter post type meta field 
 	 *
 	 */
-	#[NoReturn] function en_sendNewsletterTestMail(){
+	#[NoReturn] function en_sendNewsletterTestMail(): void {
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
-		// prevent XSS
-		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+		try {
+			// prevent XSS
+			$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		$subject = get_post_meta($_POST["post_id"],"en_subject", true);
-		$content = self::convertContent($_POST["post_id"]);
-		$content = mailManager::instance()->htmlInjection($content,get_current_user_id(), $_POST["post_id"]);
-		$receiver = get_post_meta($_POST["post_id"],"en_test_emailaddress", true);
-		$attachments = mailManager::instance()->generateAttachments(unserialize(get_post_meta($_POST["post_id"], "en_newsletter_attachments", true)));
-		mailManager::instance()->sendMail($receiver, $subject, $content, $_POST["post_id"], $attachments);
-
-		echo __("Receiver:", "easynewsletter")." ".$receiver;
+			$subject = get_post_meta($_POST["post_id"],"en_subject", true);
+			$content = self::convertContent($_POST["post_id"]);
+			$content = mailManager::instance()->htmlInjection($content,get_current_user_id(), $_POST["post_id"]);
+			$receiver = get_post_meta($_POST["post_id"],"en_test_emailaddress", true);
+			$attachments = mailManager::instance()->generateAttachments(unserialize(get_post_meta($_POST["post_id"], "en_newsletter_attachments", true)));
+			mailManager::instance()->sendMail($receiver, $subject, $content, $_POST["post_id"], $attachments);
+			echo __("Receiver:", "easynewsletter")." ".$receiver;
+		} catch (Exception | \Error $e) {
+			farnLog::log("Something went wrong while sending the test mail: $e");
+		}
 
 		wp_die();
 	}

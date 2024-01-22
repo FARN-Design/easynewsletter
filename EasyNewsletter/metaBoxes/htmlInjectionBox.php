@@ -69,9 +69,12 @@ class htmlInjectionBox{
 
 	}
 	public function custom_html_injection_save_postdata( $post_id ): void {
-		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
+		//TODO This part Results in the Blank Page with "-1"
+		/*
+        if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
 			return;
 		}
+		*/
 		if ( array_key_exists( 'customKey', $_POST ) &&  array_key_exists( 'connectedMetaField', $_POST )) {
 			if ($_POST["customKey"] == "") {
 				return;

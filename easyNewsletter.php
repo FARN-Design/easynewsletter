@@ -44,11 +44,15 @@ new easyNewsletter();
 //-----------------------------Main Class-----------------------------
 class easyNewsletter{
 
+    public static string $resourceFolder;
+
 	/**
 	 * This function is called, whenever a new object of the main plugin class is created.
 	 * It resembles the plugin initiation function.
 	 */
 	public function __construct() {
+
+		self::$resourceFolder = '/wp-content/plugins/'.basename(dirname(__FILE__)).'/EasyNewsletter/resources';
 
 		register_activation_hook(__FILE__, array(self::class, 'activation'));
 		register_deactivation_hook(__FILE__, array(self::class, 'deactivation'));

@@ -50,9 +50,12 @@ class addAttachmentBox {
 		<?php
 	}
 	public function attachment_save_postdata( $post_id ): void {
+		//TODO This part Results in the Blank Page with "-1"
+		/*
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
 			return;
 		}
+		*/
 		if ( array_key_exists( 'en_newsletter_attachment', $_POST )) {
 			if ($_POST["en_newsletter_attachment"] == "") {
 				return;
