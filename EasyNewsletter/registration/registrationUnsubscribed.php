@@ -13,7 +13,6 @@ echo "<form class='en_unsubscribeConformation'>" .
      "<input type='submit' name='submitUnsubscribed' value='Unsubscribe now'>" .
 	 "</form>";
 
-?>
 
 
 

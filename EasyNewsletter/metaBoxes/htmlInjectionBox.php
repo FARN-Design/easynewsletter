@@ -3,6 +3,8 @@
 namespace EasyNewsletter\metaBoxes;
 
 use EasyNewsletter\metaDataWrapper;
+use JetBrains\PhpStorm\NoReturn;
+use WP_Post;
 
 class htmlInjectionBox{
 
@@ -19,12 +21,12 @@ class htmlInjectionBox{
 			'en_custom_HTML_injection_boxID',                 // Unique ID
 			__('Custom HTML Injection',"easynewsletter"),      // Box title
 			array($this,'custom_html_injection_add_custom_box_html'),  // Content callback, must be of type callable
-			"en_newsletters", // Post type
+			"en_newsletters" // Post type
 		);
 	}
 
 
-	public function custom_html_injection_add_custom_box_html(\WP_Post $post): void {
+	public function custom_html_injection_add_custom_box_html( WP_Post $post): void {
 		?>
 		<div>
 			<div class='en_customHtmlInjectionHolder'>
@@ -89,7 +91,7 @@ class htmlInjectionBox{
 		}
 	}
 
-	public function html_injection_box_save_ajax_handler(): void {
+	#[NoReturn] public function html_injection_box_save_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
 			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
@@ -113,7 +115,7 @@ class htmlInjectionBox{
 		wp_die(); // All ajax handlers die when finished
 	}
 
-	public function html_injection_box_delete_element_ajax_handler(): void {
+	#[NoReturn] public function html_injection_box_delete_element_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
 			echo wp_json_encode(["status" => "fail"]);
 			wp_die();

@@ -391,7 +391,6 @@ class newsletterPostType {
 		farnLog::log("Started Newsletter sending process.");
 		farnLog::log("Current Newsletter: ". $newsletterTitle.", ID: ".$_POST["post_id"]);
 
-		$cron = easyNewsletter::updateFarnCronService();
 		wp_die();
 	}
 
@@ -411,7 +410,7 @@ class newsletterPostType {
 			$content = mailManager::instance()->htmlInjection($content,get_current_user_id(), $_POST["post_id"]);
 			$receiver = get_post_meta($_POST["post_id"],"en_test_emailaddress", true);
 			$attachments = mailManager::instance()->generateAttachments(unserialize(get_post_meta($_POST["post_id"], "en_newsletter_attachments", true)));
-			mailManager::instance()->sendMail($receiver, $subject, $content, $_POST["post_id"], $attachments);
+			mailManager::instance()->sendMail($receiver, $subject, $content, $attachments);
 			echo __("Receiver:", "easynewsletter")." ".$receiver;
 		} catch (Exception | \Error $e) {
 			farnLog::log("Something went wrong while sending the test mail: $e");

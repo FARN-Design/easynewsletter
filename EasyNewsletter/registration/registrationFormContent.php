@@ -60,7 +60,7 @@ if (in_array("en_securityQuestion", $signupFormFields)){
  
         const secContainer = document.getElementById('en_secContainer')
         const securityQuestion = document.createElement('span')
-        var task = en_generateSecQuestion()
+        const task = en_generateSecQuestion();
         securityQuestion.innerText = 'What is ' + task + ' ?'
         securityQuestion.id = 'en_secQuestion'
         securityQuestion.setAttribute('task', task)
@@ -73,11 +73,11 @@ if (in_array("en_securityQuestion", $signupFormFields)){
         }
         
         function en_checkSecurity(){
-            var taskToCheck = document.getElementById('en_secQuestion').getAttribute('task')
+            const taskToCheck = document.getElementById('en_secQuestion').getAttribute('task');
             console.log(taskToCheck)
-            var numbers = taskToCheck.split(' plus ')
+            const numbers = taskToCheck.split(' plus ');
             let secInputValue = document.getElementById('en_secInput').value
-            if (secInputValue == numberMap[numbers[0]] + numberMap[numbers[1]]){
+            if (secInputValue === numberMap[numbers[0]] + numberMap[numbers[1]]){
                 return true;
             } else {
                 alert('Wrong Security Question')

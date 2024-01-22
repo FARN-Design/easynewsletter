@@ -2,6 +2,8 @@
 
 namespace EasyNewsletter;
 
+use WP_Query;
+
 class subscriberHandler {
 
 	private static subscriberHandler $subscriber_handler;
@@ -36,12 +38,12 @@ class subscriberHandler {
 			//Change to active state and confirm double opt-in
 			metaDataWrapper::saveMetaFields($subscriberID,"en_status", "active");
 			metaDataWrapper::saveMetaFields($subscriberID,"en_doubleOptIn", "confirmed");
-			return $subscriberID;
 		} else {
 			//send activation confirmation mail
 			mailManager::instance()->sendActivationMail($metaFields['en_eMailAddress']);
-			return $subscriberID;
 		}
+
+		return $subscriberID;
 	}
 
 	public function fillRequireMetaFieldsWithDefaults($subscriberID): void{
@@ -75,33 +77,8 @@ class subscriberHandler {
 		}
 	}
 
-	private function createSubscriberInUserMode($metadata): bool {
-		if (email_exists($metadata['en_eMailAddress'])){
-			$user = get_user_by('email',$metadata['en_eMailAddress']);
-			if (get_user_meta($user->ID, 'en_status', true) == 'unsubscribed'){
-				$this->updateSubscriberMeta($user->ID, $metadata);
-				return true;
-			}
-			return false;
-		}
-		$userData = array(
-			'role' => databaseConnector::instance()->getSettingFromDB("addedUserRoleKey"), //Rolle für neue Subscriber erstellen
-			'user_pass' => wp_generate_password(),
-			'user_login' => $metadata['en_eMailAddress'],
-			'user_nicename' => $metadata['en_eMailAddress'],
-			'user_email' => $metadata['en_eMailAddress'],
-			'display_name' => isset($metadata['en_firstName']) && isset($metadata['en_lastName']) ? $metadata['en_firstName']." ".$metadata['en_lastName'] : $metadata['en_eMailAddress'],
-			'nickname' => $metadata['en_eMailAddress'],
-			'first_name' => isset($metadata['en_firstName']) ? $metadata['en_firstName'] : '',
-			'last_name' => isset($metadata['en_lastName']) ? $metadata['en_lastName'] : '',
-			'description' => 'Automatically created by the Easy Newsletter Plugin, because of an user registration via the registration form.'
-		);
-		wp_insert_user($userData);
-		return true;
-	}
-
 	private function createSubscriberInDefaultMode($metaFields): bool{
-		$query = new \WP_Query(array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ));
+		$query = new WP_Query(array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ));
 		while ($query->have_posts()){
 			$query->the_post();
 			if (get_post_meta( get_the_ID(),"en_eMailAddress", true) == $metaFields["en_eMailAddress"]){

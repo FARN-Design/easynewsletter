@@ -2,9 +2,11 @@
 
 namespace EasyNewsletter;
 
+use WP_Query;
+
 class metaDataWrapper {
 
-	//aufbau vom Array: "MetaField" => "methoden namen aus dieser Klasse"
+	//Aufbau vom Array: "MetaField" → "methoden namen aus dieser Klasse"
 	public static array $availableMetaFieldsForCustomHtmlInjection = [
 		"en_firstName" => "getFirstName",
 		"en_lastName" => "getLastName",
@@ -49,21 +51,9 @@ class metaDataWrapper {
 		return get_post_meta( $subscriberID, "en_token", true );
 	}
 
-	public static function getSubscriberCategory($subscriberID): array{
-		$subscriberCategories = get_post_meta( $subscriberID, "en_subscriberCategory", true );
-		if ( ! is_array( $subscriberCategories ) ){
-			return array();
-		}
-		return $subscriberCategories;
-	}
-
-	public static function getSubscriberRole($subscriberID): string{
-		return get_post_meta( $subscriberID, "en_subscriberRole", true );
-	}
-
 	public static function getAllSubscriberIDsAsArray(): array{
 		$allSubscriberIDs = array();
-		$query = new \WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
+		$query = new WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
 		while ($query->have_posts()){
 			$query->the_post();
 			$allSubscriberIDs[] = get_the_ID();
@@ -80,7 +70,7 @@ class metaDataWrapper {
 	}
 
 	public static function getSubscriberIdByMail($mail): string | false{
-		$query = new \WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
+		$query = new WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
 		while ($query->have_posts()){
 			$query->the_post();
 			if (get_post_meta(get_the_ID(), "en_eMailAddress", true) == $mail){
@@ -90,27 +80,7 @@ class metaDataWrapper {
 		return false;
 	}
 
-	public static function saveMetaFields($subscriberID, $metaKey, $metaValue){
+	public static function saveMetaFields($subscriberID, $metaKey, $metaValue): void {
 		update_post_meta($subscriberID, $metaKey, $metaValue);
-	}
-
-	public static function addNewMetaField($subscriberID, $metaKey, $metaValue){
-		add_post_meta($subscriberID, $metaKey, $metaValue);
-	}
-
-	public static function getAvailableMetaFieldsForCustomConditions(): array{
-		$query = new \WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
-		if ($query->have_posts()){
-			$query->the_post();
-			return get_post_meta(get_the_ID());
-		}
-		farnLog::log("No Subscriber found to fill meta keys for selection.");
-		return array();
-	}
-
-	public static function getMetaFieldCustomCondition($userID, $metaKey): string | array{
-		$postMetaData = get_post_meta($userID, $metaKey, true);
-		farnLog::log("Could not find metaValue for metaKey: ".$metaKey);
-		return $postMetaData;
 	}
 }

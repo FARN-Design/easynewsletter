@@ -101,11 +101,6 @@ class easyNewsletter{
 		//Not Available
 	}
 
-	public static function updateFarnCronService(){
-        //Not Available
-        return false;
-	}
-
 	/**
 	 * enqueues the main react/jsx-file to handle everything jsx/react related:
 	 * - the postmeta-fields for the sidebar of en_newsletters
@@ -125,7 +120,7 @@ class easyNewsletter{
 	 * Defines ajax_url and ajax_nonce (for security reasons) for javascript
 	 *
 	 */
-	function jsAjaxVariables(){ ?>
+	function jsAjaxVariables(): void { ?>
 		<script type="text/javascript">
             const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
             const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
@@ -133,7 +128,7 @@ class easyNewsletter{
 		<?php
 	}
 
-	function my_plugin_init() {
+	function my_plugin_init(): void {
 		load_plugin_textdomain( 'easynewsletter', false, basename(dirname(__FILE__)).'/EasyNewsletter/resources/language' );
 	}
 

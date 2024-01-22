@@ -2,6 +2,8 @@
 
 namespace EasyNewsletter\metaBoxes;
 
+use easyNewsletter;
+
 include "addAttachmentBox.php";
 include "htmlInjectionBox.php";
 
@@ -23,7 +25,7 @@ class metaBoxes {
 			// enqueue only for specific post types
 			if (in_array($screen->post_type, ['post', 'en_newsletters'])) {
 				// enqueue script
-				wp_enqueue_script('en_metaBoxesScripts', \easyNewsletter::$resourceFolder.'/newsletterPostTypeMetaBoxes.js', ['jquery']);
+				wp_enqueue_script('en_metaBoxesScripts', easyNewsletter::$resourceFolder.'/newsletterPostTypeMetaBoxes.js', ['jquery']);
 				// localize script, create a custom js object
 				wp_localize_script(
 					'en_metaBoxesScripts',

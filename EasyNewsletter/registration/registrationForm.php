@@ -34,4 +34,3 @@ ob_end_clean();
 $content = str_replace("{{registrationForm}}", $formContent , $content);
 
 echo $content;
-?>

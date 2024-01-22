@@ -3,9 +3,14 @@
 namespace easyNewsletter;
 
 //handles the HTTP POST request from the settings page form.
+
 if (isset($_REQUEST['submit'])){
-    //TODO create an Array with all required parameters and not the whole request.
     $settingsValueMap = $_REQUEST;
+
+    if (!wp_verify_nonce($settingsValueMap['wp_en_nonce'])){
+        return;
+    }
+
     unset($settingsValueMap['page']);
     unset($settingsValueMap['submit']);
 
@@ -43,8 +48,6 @@ if (isset($_REQUEST['submit'])){
 		unset($targetGroups[$index]);
 		databaseConnector::instance()->saveSettingInDB("subscriberCategory", serialize($targetGroups));
 	}
-
-    easyNewsletter::updateFarnCronService();
 
     //Page Reload in case of that the subscriber mode changed
 	//echo '<script>console.log("relaod!"); location.reload();</script>';
@@ -87,7 +90,6 @@ function createCheckboxes($signupFormFieldsValue): string {
 
 function generateModeSelection(): string{
     $returnString = '<select form="easyNewsletterSettings" name="subscriberMode" id="subscriberMode">';
-    $selectedMode = databaseConnector::instance()->getSettingFromDB("subscriberMode");
     $returnString .= '<option value="default" selected>default</option></select>';
     return $returnString;
 }

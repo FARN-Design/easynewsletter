@@ -99,7 +99,7 @@ class menuPage {
 		include ('menuPageContent.php');
 	}
 
-	function addScriptsAndStylesToMenuPages($hook){
+	function addScriptsAndStylesToMenuPages(): void {
 		$current_screen = get_current_screen();
 
 		if (strpos( $current_screen->base, 'easyNewsletter' )){
@@ -109,4 +109,3 @@ class menuPage {
 		wp_enqueue_style("en_menuIconCSS", plugins_url('resources/menuIcon.css', __FILE__ ));
 	}
 }
-?>

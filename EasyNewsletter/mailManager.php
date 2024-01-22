@@ -69,11 +69,11 @@ class mailManager {
 	 * @param $receiver string the receiver of the Mail.
 	 * @param $subject string the subject of the Mail.
 	 * @param $message string the message of the Mail.
-	 * @param $token string the token unique to the receiver. Used to generate the URL to unsubscribe.
+	 * @param array $attachments
 	 *
 	 * @return void
 	 */
-	public function sendMail( string $receiver, string $subject, string $message, string $postID, array $attachments): void {
+	public function sendMail( string $receiver, string $subject, string $message, array $attachments): void {
 		wp_mail($receiver, $subject, $message, self::$mailHeader, $attachments);
 	}
 
@@ -100,7 +100,7 @@ class mailManager {
 		wp_mail($receiver, $subject, $content, self::$mailHeader);
 	}
 
-	public function sendWelcomeMail($receiver, $token): void{
+	public function sendWelcomeMail($receiver): void{
 		$postID = databaseConnector::instance()->getSettingFromDB("standardWelcomePost");
 		$subject = get_post_meta($postID,"en_subject", true);
 		$content = newsletterPostType::convertContent($postID);
@@ -154,12 +154,11 @@ class mailManager {
 
 		foreach ( $allReceiverIDs as $currentID ) {
 
-			if ($mailsPerInterval <= 0 || !$sendingInProgress){ break;}
+			if ($mailsPerInterval <= 0){ break;}
 
 			//Fill the variables with the Post MetaFields
 			$en_allReceived  = metaDataWrapper::getAllReceivedNewsletterAsArray($currentID);
 			$en_eMailAddress = metaDataWrapper::getEmail($currentID);
-			$en_token        = metaDataWrapper::getToken($currentID);
 
 			//Updates last received Newsletter to the current Newsletter
 			metaDataWrapper::setLastReceivedNewsletter($currentID, $currentNewsletter);
@@ -168,14 +167,13 @@ class mailManager {
 			$subject = get_post_meta($currentNewsletterID,"en_subject", true);
 			$contentInjected = $this->htmlInjection($content, $currentID, $currentNewsletterID);
 			$attachments = $this->generateAttachments(unserialize(get_post_meta($currentNewsletterID, "en_newsletter_attachments", true)));
-			$this->sendMail( $en_eMailAddress, $subject, $contentInjected, $currentNewsletterID, $attachments);
+			$this->sendMail( $en_eMailAddress, $subject, $contentInjected, $attachments);
 			//Counts the Mails Per Interval Down
 			$mailsPerInterval = $mailsPerInterval - 1;
 		}
 
 		farnLog::log("Finished Newsletter Sending Interval.");
 
-		$numberOfSendNewsletter = $maxMailsPerInterval - $mailsPerInterval;
 		if ($mailsPerInterval > 0){
 			$this->stopNewsletterSending("Finished");
 		}
@@ -184,10 +182,7 @@ class mailManager {
 	public function getAllNewsletterReceiverIDsAsArray(string $currentNewsletterID):array{
 		$subscriberIDs = metaDataWrapper::getAllSubscriberIDsAsArray();
 		$receiverIDs = array();
-		$targetSubscriberCategory = explode(",", get_post_meta($currentNewsletterID, "en_target_group_categories", true));
-		$targetSubscriberRole = explode(",", get_post_meta($currentNewsletterID, "en_target_group_roles", true));
 		$currentNewsletter = get_the_title($currentNewsletterID);
-		$customRulesMetaField = get_post_meta($currentNewsletterID, "en_newsletter_customConditions", true);
 
 		foreach ($subscriberIDs as $subscriber_id){
 			$en_status       = metaDataWrapper::getStatus($subscriber_id);
@@ -208,7 +203,7 @@ class mailManager {
 		return str_replace('http://',"",$url);
 	}
 
-	private function generateActivationURL($receiver, $token){
+	private function generateActivationURL($receiver, $token): array|string {
 		$registrationPageId = databaseConnector::instance()->getSettingFromDB("registrationPageID");
 		$postPermalink = get_permalink($registrationPageId);
 		$url = $postPermalink."?confirmed=true&email=".$receiver."&token=".$token;
@@ -277,6 +272,8 @@ class mailManager {
 	}
 
 	/**
+	 * @param $flag
+	 *
 	 * @return void
 	 */
 	public function stopNewsletterSending($flag): void {
@@ -290,7 +287,6 @@ class mailManager {
 		$dbc->saveSettingInDB( "sendingInProgress", "false" );
 		$dbc->saveSettingInDB( "activeNewsletter", "" );
 		$dbc->saveSettingInDB( "activeNewsletterID", "" );
-		easyNewsletter::updateFarnCronService();
 
 		farnLog::log("Stopped Newsletter Sending Process");
 

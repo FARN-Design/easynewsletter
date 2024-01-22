@@ -2,7 +2,10 @@
 
 namespace EasyNewsletter;
 
+use Exception;
+use JetBrains\PhpStorm\NoReturn;
 use WP_Post;
+use WP_Query;
 
 /**
  * This class handles everything related to the subscribers Posttype.
@@ -185,22 +188,10 @@ class subscriberPostType {
 	}
 
 	/**
-	 * Defines ajax_url and ajax_nonce (for security reasons) for javascript
-	 *
-     */
-	function jsAjaxVariables(){ ?>
-	  <script type="text/javascript">
-          const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
-          const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
-      </script>
-	<?php
-	}
-
-	/**
 	 * Saves all values from javascript (via ajax) to the database
 	 *
      */
-	function saveBackendSubscriberCustomContent(){
+	#[NoReturn] function saveBackendSubscriberCustomContent(): void {
 	  check_ajax_referer( 'secure_nonce_name', 'security' );
 
 	  // prevent XSS
@@ -209,7 +200,6 @@ class subscriberPostType {
 
 	  // get values from post
 	  $content = $_POST['content'];
-	  $field_type = $_POST['field_type'];
 	  $post_id = $_POST['post_id'];
 	  $field_name = $_POST['field_name'];
 	  // save value to post_meta
@@ -229,7 +219,7 @@ class subscriberPostType {
 		try {
 			$randomInt = random_int( 0, 2023 );
 			$returnValue = hash("md5",$eMail.$randomInt);
-		} catch ( \Exception $e ) {
+		} catch ( Exception $e ) {
 			farnLog::log("Internal Error while generating token: " .$e);
 			wp_send_json_error("Internal Error while generating token");
 		}
@@ -253,7 +243,10 @@ class subscriberPostType {
 	}
 
 
-	public function addBackendSubscriber(){
+	/**
+	 * @throws Exception
+	 */
+	public function addBackendSubscriber(): void {
 		check_ajax_referer( 'secure_nonce_name', 'security' );
 
 		// prevent XSS
@@ -264,11 +257,11 @@ class subscriberPostType {
 			echo 'Username or email missing!';
 		}
 
-		$query = new \WP_Query(array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ));
+		$query = new WP_Query(array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ));
 		while ($query->have_posts()){
 			$query->the_post();
 			if (get_post_meta( get_the_ID(),"en_eMailAddress", true) == $_POST["email"]){
-				throw new \Exception("This email is already registered!");
+				throw new Exception("This email is already registered!");
 			}
 		}
 

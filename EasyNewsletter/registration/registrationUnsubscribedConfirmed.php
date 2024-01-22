@@ -2,6 +2,8 @@
 
 namespace easyNewsletter;
 
+use WP_Query;
+
 $email = sanitize_email($_GET["email"]);
 $token = $_GET["token"];
 if ( databaseConnector::instance()->getSettingFromDB( 'subscriberMode' ) == 'user' ) {
@@ -16,7 +18,7 @@ if ( databaseConnector::instance()->getSettingFromDB( 'subscriberMode' ) == 'use
 	}
 
 } else {
-	$query = new \WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
+	$query = new WP_Query( array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ) );
 
 	while ( $query->have_posts() ) {
 		$query->the_post();
@@ -33,9 +35,6 @@ if ( databaseConnector::instance()->getSettingFromDB( 'subscriberMode' ) == 'use
 		}
 	}
 }
-
-
-?>
 
 
 

@@ -3,7 +3,11 @@
 namespace EasyNewsletter\registration;
 
 use easyNewsletter\databaseConnector;
+use EasyNewsletter\farnLog;
 use easyNewsletter\mailManager;
+use Error;
+use Exception;
+use WP_Query;
 
 /**
  * This class handles everything related to the registration precess of a subscriber.
@@ -79,7 +83,7 @@ class registration {
 		$registrationFormPostAlreadyExists = false;
 		$unsubscribeFormPostAlreadyExists = false;
 
-		$query = new \WP_Query(array( "post_type" => "page", "posts_per_page" => "-1" ));
+		$query = new WP_Query(array( "post_type" => "page", "posts_per_page" => "-1" ));
 
 		while ($query->have_posts()){
 			$query->the_post();
@@ -205,8 +209,9 @@ class registration {
 			try {
 				mailManager::instance()->sendUnsubscribeMail($email);
 				echo "<div class='en_unsubscribeFromSuccessMessageContainer'><p>Unsubscribe e-mail send to: ".$email."</p></div>";
-			} catch (\Error $e){
+			} catch ( Error | Exception $e){
 				echo "<div class='en_unsubscribeFromErrorMessageContainer'><p>The e-mail was not found in out mailing list!</p></div>";
+				farnLog::log("Error: ".$e->getMessage());
 			}
 		} else{
 			echo "<form class='en_unsubscribeForm'><input type='text' name='email'><input type='submit' name='submit'></form>";

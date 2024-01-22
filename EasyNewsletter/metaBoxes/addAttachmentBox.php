@@ -2,6 +2,9 @@
 
 namespace EasyNewsletter\metaBoxes;
 
+use JetBrains\PhpStorm\NoReturn;
+use WP_Post;
+
 class addAttachmentBox {
 
 	public function __construct() {
@@ -17,12 +20,12 @@ class addAttachmentBox {
 			'en_attachment_boxID',                 // Unique ID
 			'Newsletter Attachment',      // Box title
 			array($this,'attachment_add_custom_box_html'),  // Content callback, must be of type callable
-			"en_newsletters", // Post type
+			"en_newsletters" // Post type
 		);
 	}
 
 
-	public function attachment_add_custom_box_html(\WP_Post $post): void {
+	public function attachment_add_custom_box_html( WP_Post $post): void {
 		?>
 		<div>
 			<div class="en_newsletterAttachmentsHolder">
@@ -70,7 +73,7 @@ class addAttachmentBox {
 		}
 	}
 
-	public function newsletter_attachments_save_ajax_handler(): void {
+	#[NoReturn] public function newsletter_attachments_save_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
 			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
@@ -90,7 +93,7 @@ class addAttachmentBox {
 		wp_die(); // All ajax handlers die when finished
 	}
 
-	public function newsletter_attachments_delete_element_ajax_handler() {
+	#[NoReturn] public function newsletter_attachments_delete_element_ajax_handler(): void {
 		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
 			echo wp_json_encode(["status" => "fail"]);
 			wp_die();
