@@ -12,19 +12,25 @@ Domain Path: resources/language
 License: GNU GENERAL PUBLIC LICENSE Version 3
 */
 
-namespace easyNewsletter;
-
 //-----------------------------Requirements-----------------------------
 
-require_once ('farnLog.php');
-require_once ('databaseConnector.php');
-require_once ('mailManager.php');
-require_once ('menuPage.php');
-require_once( 'registration/registration.php' );
-require_once ('subscriberPostType.php');
-require_once ('newsletterPostType.php');
-require_once ('metaDataWrapper.php');
-require_once ('subscriberHandler.php');
+use EasyNewsletter\databaseConnector;
+use EasyNewsletter\mailManager;
+use EasyNewsletter\menuPage;
+use EasyNewsletter\metaDataWrapper;
+use EasyNewsletter\newsletterPostType;
+use EasyNewsletter\registration\registration;
+use EasyNewsletter\subscriberPostType;
+
+require_once ('EasyNewsletter/farnLog.php');
+require_once ('EasyNewsletter/databaseConnector.php');
+require_once ('EasyNewsletter/mailManager.php');
+require_once ('EasyNewsletter/menuPage.php');
+require_once( 'EasyNewsletter/registration/registration.php' );
+require_once ('EasyNewsletter/subscriberPostType.php');
+require_once ('EasyNewsletter/newsletterPostType.php');
+require_once ('EasyNewsletter/metaDataWrapper.php');
+require_once ('EasyNewsletter/subscriberHandler.php');
 
 //-----------------------------Plugin Code-----------------------------
 
@@ -35,17 +41,18 @@ if (!defined('ABSPATH')){
 //Creates a new Object of the main class to initiate the plugin.
 new easyNewsletter();
 
-//TODO Checks for Updates Method
-//wp_update_plugins();
-
 //-----------------------------Main Class-----------------------------
 class easyNewsletter{
+
+    public static string $resourceFolder;
 
 	/**
 	 * This function is called, whenever a new object of the main plugin class is created.
 	 * It resembles the plugin initiation function.
 	 */
 	public function __construct() {
+
+		self::$resourceFolder = '/wp-content/plugins/'.basename(dirname(__FILE__)).'/EasyNewsletter/resources';
 
 		register_activation_hook(__FILE__, array(self::class, 'activation'));
 		register_deactivation_hook(__FILE__, array(self::class, 'deactivation'));
@@ -94,11 +101,6 @@ class easyNewsletter{
 		//Not Available
 	}
 
-	public static function updateFarnCronService(){
-        //Not Available
-        return false;
-	}
-
 	/**
 	 * enqueues the main react/jsx-file to handle everything jsx/react related:
 	 * - the postmeta-fields for the sidebar of en_newsletters
@@ -109,10 +111,8 @@ class easyNewsletter{
 	function enqueueJsxAssets(): void {
 		wp_enqueue_script(
 			'easy-newsletter-jsx-script',
-			'/wp-content/plugins/'.basename(dirname(__FILE__)).'/resources/jsx/index.js',
+			'/wp-content/plugins/'.basename(dirname(__FILE__)).'/EasyNewsletter/resources/jsx/index.js',
 			[ 'wp-edit-post' ],
-			false,
-			false
 		);
 	}
 
@@ -120,16 +120,16 @@ class easyNewsletter{
 	 * Defines ajax_url and ajax_nonce (for security reasons) for javascript
 	 *
 	 */
-	function jsAjaxVariables(){ ?>
+	function jsAjaxVariables(): void { ?>
 		<script type="text/javascript">
-            var ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
-            var ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
-		</script>
+            const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
+            const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
+        </script>
 		<?php
 	}
 
-	function my_plugin_init() {
-		load_plugin_textdomain( 'easynewsletter', false, basename(dirname(__FILE__)).'/resources/language' );
+	function my_plugin_init(): void {
+		load_plugin_textdomain( 'easynewsletter', false, basename(dirname(__FILE__)).'/EasyNewsletter/resources/language' );
 	}
 
 }
