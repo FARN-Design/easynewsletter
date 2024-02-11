@@ -29,12 +29,12 @@ class addAttachmentBox {
 		?>
 		<div>
 			<div class="en_newsletterAttachmentsHolder">
-				<h4><?php _e("Added attachments to this newsletter:", "easynewsletter")?></h4>
+				<h4><?php esc_html_e ("Added attachments to this newsletter:", "easynewsletter")?></h4>
 				<div>
 					<?php
 					$array = unserialize(get_post_meta($post->ID, "en_newsletter_attachments", true));
 					foreach ($array as $value){
-						echo "<div><input type='text' class='en_newsletterAttachmentURL' disabled value='".esc_attr($value)."'><button class='button en_delete_attachment'>".esc_attr_e('Remove', 'easynewsletter')."</button></div>";
+						echo "<div><input type='text' class='en_newsletterAttachmentURL' disabled value='".esc_attr($value)."'><button class='button en_delete_attachment'>".esc_attr__('Remove', 'easynewsletter')."</button></div>";
 					}
 					if (empty($array)) {
 						echo "<p>".esc_attr__('No attachments added.',"easynewsletter")."</p>";
@@ -43,28 +43,23 @@ class addAttachmentBox {
 				</div>
 			</div>
 			<div>
-				<h4><?php _e("Add new attachment:", "easynewsletter")?></h4>
+				<h4><?php esc_html_e("Add new attachment:", "easynewsletter")?></h4>
 				<label for="en_newsletter_attachment">
-					<input type="text" id="en_newsletter_attachment" name="en_newsletter_attachment" placeholder="<?php _e("Attachment URL", "easynewsletter")?>" class="en_newsletterAttachmentURL_input">
+					<input type="text" id="en_newsletter_attachment" name="en_newsletter_attachment" placeholder="<?php esc_html_e("Attachment URL", "easynewsletter")?>" class="en_newsletterAttachmentURL_input">
 				</label>
-				<button class="button en_save_newsletter_attachment_box"><?php _e("Save new attachment", "easynewsletter")?></button>
+				<button class="button en_save_newsletter_attachment_box"><?php esc_html_e ("Save new attachment", "easynewsletter")?></button>
 			</div>
 		</div>
 		<?php
 	}
 	public function attachment_save_postdata( $post_id ): void {
-		//TODO This part Results in the Blank Page with "-1"
-		/*
-		if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
-			return;
-		}
-		*/
 		if ( array_key_exists( 'en_newsletter_attachment', $_POST )) {
-			if ($_POST["en_newsletter_attachment"] == "") {
+            $attachmentURL = sanitize_url($_POST["en_newsletter_attachment"]);
+			if ($attachmentURL == "") {
 				return;
 			}
 			$metaField = unserialize(get_post_meta($post_id, "en_newsletter_attachments", true));
-			$metaField = array_merge($metaField, array($_POST["en_newsletter_attachment"]));
+			$metaField = array_merge($metaField, array($attachmentURL));
 			update_post_meta(
 				$post_id,
 				'en_newsletter_attachments',
@@ -80,10 +75,11 @@ class addAttachmentBox {
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		$metaField = unserialize(get_post_meta($_POST["post_ID"], "en_newsletter_attachments", true));
-		$metaField = array_merge($metaField, array($_POST["attachmentURL"]));
+		$postID = sanitize_key($_POST["post_ID"]);
+		$metaField = unserialize(get_post_meta($postID, "en_newsletter_attachments", true));
+		$metaField = array_merge($metaField, array(sanitize_url($_POST["attachmentURL"])));
 		update_post_meta(
-			$_POST["post_ID"],
+			$postID,
 			'en_newsletter_attachments',
 			serialize($metaField)
 		);
@@ -100,12 +96,13 @@ class addAttachmentBox {
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		$metaField = unserialize(get_post_meta($_POST["post_ID"], "en_newsletter_attachments", true));
-		$key = array_search($_POST["attachmentURL"], $metaField);
+        $postID = sanitize_key($_POST["post_ID"]);
+		$metaField = unserialize(get_post_meta($postID, "en_newsletter_attachments", true));
+		$key = array_search(sanitize_url($_POST["attachmentURL"]), $metaField);
 		unset($metaField[$key]);
 
 		update_post_meta(
-			$_POST["post_ID"],
+			$postID,
 			'en_newsletter_attachments',
 			serialize($metaField)
 		);

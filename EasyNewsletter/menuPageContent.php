@@ -50,7 +50,7 @@ function getLastSendNewsletter(): string{
 	if (empty($lastSendNewsletterID)){
 		return "Empty";
 	}
-	return "<a href='/wp-admin/post.php?post=".$lastSendNewsletterID."&action=edit'>$postTitle</a>";
+	return "<a href='/wp-admin/post.php?post=".esc_attr($lastSendNewsletterID)."&action=edit'>".esc_html($postTitle)."</a>";
 }
 
 function getLastEditedNewsletter(): string {
@@ -60,7 +60,7 @@ function getLastEditedNewsletter(): string {
 		return "Empty";
 	}
 
-	return "<a href='/wp-admin/post.php?post=" . $lastEditedNewsletterID . "&action=edit'>$postTitle</a>";
+	return "<a href='/wp-admin/post.php?post=" . esc_attr($lastEditedNewsletterID) . "&action=edit'>".esc_html($postTitle)."</a>";
 }
 
 function getSubscribersLink(): string{
@@ -73,14 +73,14 @@ function getSubscribersLink(): string{
 
 ?>
 <div class="wrap">
-    <h1 class="wp-heading-inline"><?php _e("Easy Newsletter Overview", "easynewsletter");?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e ("Easy Newsletter Overview", "easynewsletter");?></h1>
     <hr class="wp-header-end">
     <table class="en_tableStyle">
         <thead>
             <tr>
-                <th><h2><?php _e("All Newsletter", "easynewsletter");?></h2></th>
-                <th><h2><?php _e("All Subscriber", "easynewsletter");?></h2></th>
-                <th><h2><?php _e("Settings", "easynewsletter");?></h2></th>
+                <th><h2><?php esc_attr_e("All Newsletter", "easynewsletter");?></h2></th>
+                <th><h2><?php esc_attr_e("All Subscriber", "easynewsletter");?></h2></th>
+                <th><h2><?php esc_attr_e("Settings", "easynewsletter");?></h2></th>
             </tr>
         </thead>
         <tbody>
@@ -107,9 +107,9 @@ function getSubscribersLink(): string{
             </td>
         </tr>
         <tr>
-            <td><a class="button-primary" href="/wp-admin/edit.php?post_type=en_newsletters"><?php _e("To All Newsletter", "easynewsletter");?></a></td>
-            <td><a class="button-primary" href="<?php echo esc_attr(getSubscribersLink());?>"><?php _e("To All Subscribers", "easynewsletter");?></a></td>
-            <td><a class="button-primary" href="/wp-admin/admin.php?page=easyNewsletterSettings"><?php _e("To Settings", "easynewsletter");?></a></td>
+            <td><a class="button-primary" href="/wp-admin/edit.php?post_type=en_newsletters"><?php esc_html_e ("To All Newsletter", "easynewsletter");?></a></td>
+            <td><a class="button-primary" href="<?php echo esc_attr(getSubscribersLink());?>"><?php esc_html_e ("To All Subscribers", "easynewsletter");?></a></td>
+            <td><a class="button-primary" href="/wp-admin/admin.php?page=easyNewsletterSettings"><?php esc_html_e ("To Settings", "easynewsletter");?></a></td>
         </tr>
         </tbody>
     </table>

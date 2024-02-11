@@ -113,8 +113,8 @@ class subscriberPostType {
 	public function enqueueSubscriberScriptsAndStyles(): void {
 		global $post_type;
 		if( 'en_subscribers' == $post_type ){
-			wp_enqueue_script( 'editSubscriberColumns-script', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/editSubscriberColumns.js' );
-			wp_enqueue_style( 'editSubscriberColumns-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/editSubscriberColumns.css' );
+			wp_enqueue_script( 'editSubscriberColumns-script', plugins_url("EasyNewsletter/resources/editSubscriberColumns.js"));
+			wp_enqueue_style( 'editSubscriberColumns-style', plugins_url("EasyNewsletter/resources/editSubscriberColumns.css"));
 		}
 	}
 
@@ -145,17 +145,13 @@ class subscriberPostType {
         if (isset($metaFields[$columnName])){
             switch ($columnName){
                 case 'en_allReceived':
-//	                $columnValues = unserialize(get_post_meta($post->ID, 'en_allReceived', true));
-//	                foreach ($columnValues as $value){
-//		                echo "<div>".$value."</div>";
-//	                }
                     $allReceived = unserialize(get_post_meta($post->ID, $columnName, true));
 		            if (is_array($allReceived)){
 			            if (empty($allReceived)){
 				            echo "<div><p>No received Newsletter</p></div>";
                             break;
 			            }
-			            echo "<div>".implode( ',', $allReceived )."</div>";
+			            echo "<div>".esc_html (implode( ',', $allReceived ))."</div>";
                         break;
 		            }
 		            echo "<div><p style='color:red;'>Serialized Array required!</p></div>";
@@ -164,7 +160,7 @@ class subscriberPostType {
 	                if (!is_array(get_post_meta($post->ID, 'en_subscriberCategory', true))){
 		                echo "<div><p style='color:red;'>Serialized Array provided, Array required!</p></div>";
 	                } else{
-		                echo "<div>".serialize(get_post_meta($post->ID, $columnName, true))."</div>";
+		                echo "<div>".esc_html(serialize(get_post_meta($post->ID, $columnName, true)))."</div>";
 	                }
                     break;
                 case 'en_lastReceived':
@@ -199,9 +195,9 @@ class subscriberPostType {
 	  $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
 	  // get values from post
-	  $content = $_POST['content'];
-	  $post_id = $_POST['post_id'];
-	  $field_name = $_POST['field_name'];
+	  $content = sanitize_text_field($_POST['content']);
+	  $post_id = sanitize_key($_POST['post_id']);
+	  $field_name = sanitize_text_field($_POST['field_name']);
 	  // save value to post_meta
 	  update_post_meta($post_id,$field_name,$content);
 
@@ -253,14 +249,15 @@ class subscriberPostType {
 		$_GET   = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		if (!isset($_POST["email"])) {
+		$email = sanitize_email($_POST["email"]);
+		if (!empty($email)) {
 			echo 'Username or email missing!';
 		}
 
 		$query = new WP_Query(array( "post_type" => "en_subscribers", "posts_per_page" => "-1" ));
 		while ($query->have_posts()){
 			$query->the_post();
-			if (get_post_meta( get_the_ID(),"en_eMailAddress", true) == $_POST["email"]){
+			if (get_post_meta( get_the_ID(),"en_eMailAddress", true) == $email){
 				throw new Exception("This email is already registered!");
 			}
 		}
@@ -268,11 +265,11 @@ class subscriberPostType {
 
 		$id = wp_insert_post(array(
 			"post_type" => "en_subscribers",
-			"post_title" => $_POST['email'],
+			"post_title" => $email,
 			"post_status" => "publish",
 		));
 
-		update_post_meta($id, "en_eMailAddress", $_POST["email"]);
+		update_post_meta($id, "en_eMailAddress", $email);
 		subscriberHandler::instance()->fillRequireMetaFieldsWithDefaults($id);
 
 		wp_die();

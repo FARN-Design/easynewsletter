@@ -3,7 +3,7 @@
 namespace easyNewsletter;
 
 $email = sanitize_email($_GET["email"]);
-$token = $_GET["token"];
+$token = sanitize_text_field($_GET["token"]);
 
 echo esc_attr(get_the_content("", false, databaseConnector::instance()->getSettingFromDB("unsubscribedPageID")));
 

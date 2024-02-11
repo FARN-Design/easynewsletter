@@ -24,7 +24,6 @@ class subscriberHandler {
 		//get newly created User
 		$subscriberID = metaDataWrapper::getSubscriberIdByMail($metaFields["en_eMailAddress"]);
 
-		farnLog::log("New user ID: ".$subscriberID);
 
 		//Fill required MetaData with defaults
 		$this->fillRequireMetaFieldsWithDefaults($subscriberID);

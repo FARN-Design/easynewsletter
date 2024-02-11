@@ -2,7 +2,7 @@
 
 namespace easyNewsletter;
 
-if (isset($_REQUEST['submit'])){
+if (!empty(sanitize_text_field($_REQUEST['submit'] ?? ""))){
 
     $metaFields = array();
 

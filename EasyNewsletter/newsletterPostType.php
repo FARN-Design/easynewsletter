@@ -332,10 +332,10 @@ class newsletterPostType {
 	function enqueue_script() {
 		global $post_type;
 		if( 'en_newsletters' == $post_type ) {
-			wp_enqueue_script( 'newsletters-admin-edit-script', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newslettersPostTypeAdmin.js' );
-			wp_enqueue_style( 'newsletters-admin-edit-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newslettersPostTypeAdmin.css' );
-			wp_enqueue_style( 'newsletters-admin-base-style', '/wp-content/plugins/'.dirname(plugin_basename(__FILE__)).'/resources/newsletterBaseStyle.css' );
-			echo'<style>'.esc_attr(databaseConnector::instance()->getSettingFromDB("newsletterCSS")).'</style>';
+			wp_enqueue_script( 'newsletters-admin-edit-script', plugins_url("resources/newslettersPostTypeAdmin.js", __FILE__));
+			wp_enqueue_style( 'newsletters-admin-edit-style', plugins_url("/resources/newslettersPostTypeAdmin.css", __FILE__));
+			wp_enqueue_style( 'newsletters-admin-base-style', plugins_url("/resources/newsletterBaseStyle.css", __FILE__));
+			wp_add_inline_style("en_custom_newsletter_css", esc_attr(databaseConnector::instance()->getSettingFromDB("newsletterCSS")));
 		}
 	}
 
@@ -357,7 +357,7 @@ class newsletterPostType {
 		// prevent XSS
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		echo esc_attr(count(mailManager::instance()->getAllNewsletterReceiverIDsAsArray($_POST["post_id"])));
+		echo esc_attr(count(mailManager::instance()->getAllNewsletterReceiverIDsAsArray(sanitize_key($_POST["post_id"]))));
 
 		wp_die();
 	}
@@ -381,15 +381,16 @@ class newsletterPostType {
 			wp_die();
 		}
 
-		$newsletterTitle = get_the_title($_POST["post_id"]);
+		$postID = sanitize_key($_POST["post_id"]);
+		$newsletterTitle = get_the_title($postID);
 
 		$dbc->saveSettingInDB("sendingInProgress", "true");
 		$dbc->saveSettingInDB("activeNewsletter", $newsletterTitle);
-		$dbc->saveSettingInDB("activeNewsletterID", $_POST["post_id"]);
-		$dbc->saveSettingInDB("lastSendNewsletterID", $_POST["post_id"]);
+		$dbc->saveSettingInDB("activeNewsletterID", $postID);
+		$dbc->saveSettingInDB("lastSendNewsletterID", $postID);
 
 		farnLog::log("Started Newsletter sending process.");
-		farnLog::log("Current Newsletter: ". $newsletterTitle.", ID: ".$_POST["post_id"]);
+		farnLog::log("Current Newsletter: ". $newsletterTitle.", ID: ".$postID);
 
 		wp_die();
 	}
@@ -405,11 +406,12 @@ class newsletterPostType {
 			// prevent XSS
 			$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-			$subject = get_post_meta($_POST["post_id"],"en_subject", true);
-			$content = self::convertContent($_POST["post_id"]);
-			$content = mailManager::instance()->htmlInjection($content,get_current_user_id(), $_POST["post_id"]);
-			$receiver = get_post_meta($_POST["post_id"],"en_test_emailaddress", true);
-			$attachments = mailManager::instance()->generateAttachments(unserialize(get_post_meta($_POST["post_id"], "en_newsletter_attachments", true)));
+			$postID = sanitize_key($_POST["post_id"]);
+			$subject = get_post_meta($postID,"en_subject", true);
+			$content = self::convertContent($postID);
+			$content = mailManager::instance()->htmlInjection($content,get_current_user_id(), $postID);
+			$receiver = get_post_meta($postID,"en_test_emailaddress", true);
+			$attachments = mailManager::instance()->generateAttachments(unserialize(get_post_meta($postID, "en_newsletter_attachments", true)));
 			mailManager::instance()->sendMail($receiver, $subject, $content, $attachments);
 			echo esc_attr__("Receiver:", "easynewsletter")." ".$receiver;
 		} catch (Exception | \Error $e) {

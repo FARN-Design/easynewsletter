@@ -5,7 +5,7 @@ namespace easyNewsletter;
 use WP_Query;
 
 $email = sanitize_email($_GET["email"]);
-$token = $_GET["token"];
+$token = sanitize_text_field($_GET["token"]);
 
 
 $query = new WP_Query(array("post_type" => "en_subscribers", "posts_per_page" => "-1"));
@@ -24,6 +24,5 @@ while ($query->have_posts()){
 		}
 	}
 }
-farnLog::log("Could not confirm Registration: Invalid Email: ".$email);
 //No escape because we want to get the raw value
 echo get_the_content("", false, databaseConnector::instance()->getSettingFromDB("confirmationDeniedPageID"));

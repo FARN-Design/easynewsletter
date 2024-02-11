@@ -41,16 +41,12 @@ if (isset($_REQUEST['submit'])){
         // save the value to the database
         databaseConnector::instance()->saveSettingInDB($setting, $value);
     }
-
-	if (isset($_POST["removeCategory"])){
+	if ( !empty(sanitize_text_field( $_POST["removeCategory"] ?? "" ))){
 		$targetGroups = unserialize(databaseConnector::instance()->getSettingFromDB("subscriberCategory"));
-		$index = array_search($_POST["category"], $targetGroups);
+		$index = array_search(sanitize_text_field($_POST["category"]), $targetGroups);
 		unset($targetGroups[$index]);
 		databaseConnector::instance()->saveSettingInDB("subscriberCategory", serialize($targetGroups));
 	}
-
-    //Page Reload in case of that the subscriber mode changed
-	//echo '<script>console.log("relaod!"); location.reload();</script>';
 }
 
 if (isset($_REQUEST["stopNewsletterSending"])){
@@ -163,18 +159,18 @@ function generateTargetGroupsRoles(): string{
                         'sendingInProgress', 'activeNewsletter', 'activeNewsletterID' => "<input type='text' name='" . $setting . "' id='" . $setting . "' value='" . $value . "' disabled>",
 		                'subscriberCategory' => generateTargetGroupsCategory(),
 		                'subscriberRole' => generateTargetGroupsRoles(),
-		                'newsletterCSS' => "<textarea name='" . $setting . "' id='" . $setting . "'rows='4' cols='50' form='easyNewsletterSettings'>".$value."</textarea>",
-                        default => "<input type='text' name='" . $setting . "' id='" . $setting . "' value='" . $value . "'>",
+		                'newsletterCSS' => "<textarea name='" . esc_attr($setting) . "' id='" . esc_attr($setting) . "'rows='4' cols='50' form='easyNewsletterSettings'>".esc_textarea($value)."</textarea>",
+                        default => "<input type='text' name='" . esc_attr($setting) . "' id='" . esc_attr($setting) . "' value='" . esc_attr($value) . "'>",
 	                };
                     echo "</label></td></tr>";
                 } ?>
             </tbody>
         </table>
         <?php echo "<input type='hidden' name='wp_en_nonce' value='".wp_create_nonce()."'>"?>
-        <input type="submit" class="button button-primary" name="submit" value="<?php _e("Save", 'easynewsletter')?>">
+        <input type="submit" class="button button-primary" name="submit" value="<?php esc_html_e ("Save", 'easynewsletter')?>">
 
-        <h3><?php _e("Press this Button to stop the Newsletter sending Process", 'easynewsletter')?></h3>
-        <input type="submit" class="button button-primary" style="background-color: red; border-color: red" name="stopNewsletterSending" value="<?php _e("Stop Newsletter Sending Process", 'easynewsletter')?>">
+        <h3><?php esc_html_e ("Press this Button to stop the Newsletter sending Process", 'easynewsletter')?></h3>
+        <input type="submit" class="button button-primary" style="background-color: red; border-color: red" name="stopNewsletterSending" value="<?php esc_html_e ("Stop Newsletter Sending Process", 'easynewsletter')?>">
     </form>
     <br>
 </div>

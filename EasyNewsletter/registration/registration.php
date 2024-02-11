@@ -186,17 +186,28 @@ class registration {
 	 * @return string|bool
 	 */
 	public function registrationFormFilter(): string|bool {
+
+		$confirmed = sanitize_text_field($_GET['confirmed'] ?? "");
+		$unsubscribed = sanitize_text_field($_GET['unsubscribed'] ?? "");
+		$submitUnsubscribed = sanitize_text_field($_GET["submitUnsubscribed"] ?? "");
+		$email = sanitize_email($_GET['email'] ?? "");
+		$token = sanitize_text_field($_GET['token'] ?? "");
+
 		ob_start();
-		if (empty($_GET) || !isset($_GET['confirmed']) && !isset($_GET['unsubscribed']) && !isset($_GET["submitUnsubscribed"])){
+		if (empty($_GET) ||
+		    !empty($confirmed) &&
+		    !empty($unsubscribed) &&
+		    !empty($submitUnsubscribed)
+		) {
 			include 'registrationForm.php';
 		}
-		else if (isset($_GET['confirmed']) && isset($_GET['email']) && isset($_GET['token'])){
+		else if (!empty($confirmed) && !empty($email) && !empty($token)){
 			include 'registrationConfirmed.php';
 		}
-		else if (isset($_GET['unsubscribed'])&& isset($_GET['email']) && isset($_GET['token'])){
+		else if (!empty($unsubscribed) && !empty($email) && !empty($token)){
 			include 'registrationUnsubscribed.php';
 		}
-		else if (isset($_GET["submitUnsubscribed"])){
+		else if (!empty($submitUnsubscribed)){
 			include "registrationUnsubscribedConfirmed.php";
 		}
 		return ob_get_clean();
@@ -205,7 +216,8 @@ class registration {
 	public function easyNewsletterUnsubscribeForm(): string|bool {
 		ob_start();
 		$email = sanitize_email($_GET["email"]);
-		if (isset($_GET["submit"]) && isset($email)){
+		$submit = sanitize_text_field($_GET["submit"]);
+		if (!empty($submit) && !empty($email)){
 			try {
 				mailManager::instance()->sendUnsubscribeMail($email);
 				echo "<div class='en_unsubscribeFromSuccessMessageContainer'><p>Unsubscribe e-mail send to: ".esc_attr($email)."</p></div>";

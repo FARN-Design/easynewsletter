@@ -30,7 +30,7 @@ class htmlInjectionBox{
 		?>
 		<div>
 			<div class='en_customHtmlInjectionHolder'>
-				<h4><?php _e('Current HTML injection for this newsletter:', 'easynewsletter') ?></h4>
+				<h4><?php esc_html_e ('Current HTML injection for this newsletter:', 'easynewsletter') ?></h4>
 				<div>
 					<?php
 					$array = unserialize(get_post_meta($post->ID, "en_custom_html_injection", true));
@@ -49,9 +49,9 @@ class htmlInjectionBox{
 				</div>
 			</div>
 			<div>
-				<h4><?php _e('Add new custom HTML injection:', 'easynewsletter') ?></h4>
+				<h4><?php esc_html_e ('Add new custom HTML injection:', 'easynewsletter') ?></h4>
 				<label for="customKey">
-					<input type="text" id="customKey" name="customKey" class="en_customHtmlInjectionKeyInput" placeholder="<?php _e('Input Custom Key', 'easynewsletter') ?>">
+					<input type="text" id="customKey" name="customKey" class="en_customHtmlInjectionKeyInput" placeholder="<?php esc_html_e ('Input Custom Key', 'easynewsletter') ?>">
 				</label>
 				=>
 				<label for="connectedMetaField">
@@ -64,25 +64,19 @@ class htmlInjectionBox{
 						?>
 					</select>
 				</label>
-				<button class="button en_save_custom_html_injection_box"><?php _e('Save new Injection', 'easynewsletter') ?></button>
+				<button class="button en_save_custom_html_injection_box"><?php esc_html_e ('Save new Injection', 'easynewsletter') ?></button>
 			</div>
 		</div>
 		<?php
 
 	}
 	public function custom_html_injection_save_postdata( $post_id ): void {
-		//TODO This part Results in the Blank Page with "-1"
-		/*
-        if (!check_ajax_referer( 'secure_nonce_name', 'security' )){
-			return;
-		}
-		*/
 		if ( array_key_exists( 'customKey', $_POST ) &&  array_key_exists( 'connectedMetaField', $_POST )) {
-			if ($_POST["customKey"] == "") {
+			if (sanitize_key($_POST["customKey"]) == "") {
 				return;
 			}
 			$metaField = unserialize(get_post_meta($post_id, "en_custom_html_injection", true));
-			$metaField[$_POST["customKey"]] = $_POST["connectedMetaField"];
+			$metaField[sanitize_textarea_field($_POST["customKey"])] = sanitize_textarea_field($_POST["connectedMetaField"]);
 			update_post_meta(
 				$post_id,
 				'en_custom_html_injection',
@@ -98,16 +92,17 @@ class htmlInjectionBox{
 		}
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		$metaField = unserialize(get_post_meta($_POST["post_ID"], "en_custom_html_injection", true));
+        $postID = sanitize_key($_POST["post_ID"]);
+		$metaField = unserialize(get_post_meta($postID, "en_custom_html_injection", true));
 
-		echo esc_attr($_POST["metaField"]);
+		echo esc_attr(sanitize_textarea_field($_POST["metaField"]));
 
-		$metaField[$_POST["customKey"]] = $_POST["metaField"];
+		$metaField[sanitize_textarea_field($_POST["customKey"])] = sanitize_textarea_field($_POST["metaField"]);
 
 		update_post_meta(
-			$_POST["post_ID"],
-			'en_custom_html_injection',
-			serialize($metaField)
+            $postID,
+            'en_custom_html_injection',
+            serialize($metaField)
 		);
 
 		echo wp_json_encode(["status" => "fail"]);
@@ -123,12 +118,13 @@ class htmlInjectionBox{
 
 		$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-		$metaField = unserialize(get_post_meta($_POST["post_ID"], "en_custom_html_injection", true));
+        $postID = sanitize_key($_POST["post_ID"]);
+		$metaField = unserialize(get_post_meta($postID, "en_custom_html_injection", true));
 
-		if ($metaField[$_POST["customKey"]] == $_POST["metaField"]){
-			unset($metaField[$_POST["customKey"]]);
+		if ($metaField[sanitize_textarea_field($_POST["customKey"])] == sanitize_textarea_field($_POST["metaField"])){
+			unset($metaField[sanitize_textarea_field($_POST["customKey"])]);
 			update_post_meta(
-				$_POST["post_ID"],
+				$postID,
 				'en_custom_html_injection',
 				serialize($metaField)
 			);

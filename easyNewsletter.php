@@ -44,15 +44,11 @@ new easyNewsletter();
 //-----------------------------Main Class-----------------------------
 class easyNewsletter{
 
-    public static string $resourceFolder;
-
 	/**
 	 * This function is called, whenever a new object of the main plugin class is created.
 	 * It resembles the plugin initiation function.
 	 */
 	public function __construct() {
-
-		self::$resourceFolder = '/wp-content/plugins/'.basename(dirname(__FILE__)).'/EasyNewsletter/resources';
 
 		register_activation_hook(__FILE__, array(self::class, 'activation'));
 		register_deactivation_hook(__FILE__, array(self::class, 'deactivation'));
@@ -120,7 +116,12 @@ class easyNewsletter{
 	 * Defines ajax_url and ajax_nonce (for security reasons) for javascript
 	 *
 	 */
-	function jsAjaxVariables(): void { ?>
+	function jsAjaxVariables(): void {
+
+        wp_add_inline_script("ajax-variables", "
+            const ajax_url = ".admin_url( "admin-ajax.php" ).";
+            const ajax_nonce = ".wp_create_nonce( "secure_nonce_name" ).";", "before")
+        ?>
 		<script type="text/javascript">
             const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
             const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
@@ -129,7 +130,7 @@ class easyNewsletter{
 	}
 
 	function my_plugin_init(): void {
-		load_plugin_textdomain( 'easynewsletter', false, basename(dirname(__FILE__)).'/EasyNewsletter/resources/language' );
+		load_plugin_textdomain( 'easynewsletter', false, plugins_url("EasyNewsletter/resources/language", __FILE__));
 	}
 
 }

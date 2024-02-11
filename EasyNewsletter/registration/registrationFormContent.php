@@ -35,71 +35,13 @@ namespace easyNewsletter;
 		}
 		?>
         <br>
-        <?php
-
-if (in_array("en_securityQuestion", $signupFormFields)){
-    echo '<div id="en_secContainer">
-            <br>
-            <input type="number" id="en_secInput" required placeholder="0">
-        </div>';
-
-    echo "<script>
-
-        const numberMap = {
-            'zero': 0,
-            'one': 1,
-            'two': 2,
-            'three': 3,
-            'four': 4,
-            'five': 5,
-            'six': 6,
-            'seven': 7,
-            'eight': 8,
-            'nine': 9,
-        }
- 
-        const secContainer = document.getElementById('en_secContainer')
-        const securityQuestion = document.createElement('span')
-        const task = en_generateSecQuestion();
-        securityQuestion.innerText = 'What is ' + task + ' ?'
-        securityQuestion.id = 'en_secQuestion'
-        securityQuestion.setAttribute('task', task)
-        secContainer.insertBefore(securityQuestion, secContainer.children[0])
-        
-        function en_generateSecQuestion(){
-            let val1 = Math.floor(Math.random() * 10);
-            let val2 = Math.floor(Math.random() * 10);
-            return Object.keys(numberMap).find(key => numberMap[key] === val1) + ' plus ' + Object.keys(numberMap).find(key => numberMap[key] === val2)
-        }
-        
-        function en_checkSecurity(){
-            const taskToCheck = document.getElementById('en_secQuestion').getAttribute('task');
-            console.log(taskToCheck)
-            const numbers = taskToCheck.split(' plus ');
-            let secInputValue = document.getElementById('en_secInput').value
-            if (secInputValue === numberMap[numbers[0]] + numberMap[numbers[1]]){
-                return true;
-            } else {
-                alert('Wrong Security Question')
-                return false
-            }
-        }
-        
-        const form = document.getElementById('en_signup_form')
-        form.setAttribute('onsubmit', 'return en_checkSecurity()')
-
-    </script>";
-} ?>
-
-		<input type="submit" class="button button-primary" name="submit" id="submit" value="<?php _e("Save", 'easynewsletter')?>">
+		<input type="submit" class="button button-primary" name="submit" id="submit" value="<?php esc_html_e ("Save", 'easynewsletter')?>">
     </form>
 </div>
 
 <?php
 if (in_array("en_eMailAddressValidation", $signupFormFields)) {
-	echo "
-    <script>
-      
+	wp_add_inline_script("en_registrationValidation", "
         const submitButton = document.getElementById('submit')
         let emailElement = document.getElementById('en_eMailAddress')
         let emailValidationElement = document.getElementById('en_eMailAddressValidation')
@@ -114,6 +56,5 @@ if (in_array("en_eMailAddressValidation", $signupFormFields)) {
                 submitButton.setAttribute('disabled', 'disabled')
                 emailValidationElement.style.color = 'red'
             }
-        }
-        </script>";
+        }");
 }

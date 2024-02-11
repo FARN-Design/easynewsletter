@@ -5,7 +5,7 @@ namespace easyNewsletter;
 use WP_Query;
 
 $email = sanitize_email($_GET["email"]);
-$token = $_GET["token"];
+$token = sanitize_text_field($_GET["token"]);
 if ( databaseConnector::instance()->getSettingFromDB( 'subscriberMode' ) == 'user' ) {
 	$user = get_user_by( 'email', $email );
 	if ( get_user_meta( $user->ID, "en_token", true ) == $token ) {
