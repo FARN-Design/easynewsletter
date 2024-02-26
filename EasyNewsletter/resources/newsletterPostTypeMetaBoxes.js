@@ -1,8 +1,12 @@
 
+const ajax_url =  en_metaBoxes_obj.url;
+const ajax_nonce = en_metaBoxes_obj.nonce;
+
 //Custom HTML Injection BOX
 (function ($, window, document) {
     'use strict';
     $(document).ready(function () {
+
 
         // Save Button
         $(document).on('click', '.en_save_custom_html_injection_box', function () {

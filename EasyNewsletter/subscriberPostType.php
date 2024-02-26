@@ -113,8 +113,17 @@ class subscriberPostType {
 	public function enqueueSubscriberScriptsAndStyles(): void {
 		global $post_type;
 		if( 'en_subscribers' == $post_type ){
-			wp_enqueue_script( 'editSubscriberColumns-script', plugins_url("EasyNewsletter/resources/editSubscriberColumns.js"));
-			wp_enqueue_style( 'editSubscriberColumns-style', plugins_url("EasyNewsletter/resources/editSubscriberColumns.css"));
+			wp_enqueue_script( 'editSubscriberColumns-script', plugins_url("easynewsletter//EasyNewsletter/resources/editSubscriberColumns.js"));
+			wp_enqueue_style( 'editSubscriberColumns-style', plugins_url("easynewsletter/EasyNewsletter/resources/editSubscriberColumns.css"));
+
+			wp_localize_script(
+				'editSubscriberColumns-script',
+				'en_ajax_obj',
+				[
+					'url' => admin_url('admin-ajax.php'),
+					"nonce" => wp_create_nonce( "secure_nonce_name" )
+				]
+			);
 		}
 	}
 
@@ -178,7 +187,7 @@ class subscriberPostType {
 	                $columnContent .= "<div class='edit_button dashicons-before dashicons-edit' title='bearbeiten'></div>";
 	                $columnContent .= "<div class='save_button dashicons-before dashicons-saved' title='speichern'></div>";
 	                $columnContent .= "<div class='exit_button dashicons-before dashicons-no-alt' title='abbrechen'></div>";
-	                echo esc_html($columnContent);
+	                echo $columnContent;
             }
         }
 	}

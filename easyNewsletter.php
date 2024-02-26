@@ -107,26 +107,9 @@ class easyNewsletter{
 	function enqueueJsxAssets(): void {
 		wp_enqueue_script(
 			'easy-newsletter-jsx-script',
-			'/wp-content/plugins/'.basename(dirname(__FILE__)).'/EasyNewsletter/resources/jsx/index.js',
+			plugins_url("/EasyNewsletter/resources/jsx/index.js", __FILE__),
 			[ 'wp-edit-post' ],
 		);
-	}
-
-	/**
-	 * Defines ajax_url and ajax_nonce (for security reasons) for javascript
-	 *
-	 */
-	function jsAjaxVariables(): void {
-
-        wp_add_inline_script("ajax-variables", "
-            const ajax_url = ".admin_url( "admin-ajax.php" ).";
-            const ajax_nonce = ".wp_create_nonce( "secure_nonce_name" ).";", "before")
-        ?>
-		<script type="text/javascript">
-            const ajax_url = '<?php echo admin_url( "admin-ajax.php" ); ?>';
-            const ajax_nonce = '<?php echo wp_create_nonce( "secure_nonce_name" ); ?>';
-        </script>
-		<?php
 	}
 
 	function my_plugin_init(): void {

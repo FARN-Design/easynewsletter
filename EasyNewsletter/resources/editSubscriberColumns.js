@@ -1,3 +1,7 @@
+
+const ajax_url = en_ajax_obj.url
+const ajax_nonce = en_ajax_obj.nonce
+
 jQuery(document).ready(function($) {
 
     // click on "edit"-Button

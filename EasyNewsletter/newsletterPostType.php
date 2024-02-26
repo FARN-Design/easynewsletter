@@ -336,6 +336,10 @@ class newsletterPostType {
 			wp_enqueue_style( 'newsletters-admin-edit-style', plugins_url("/resources/newslettersPostTypeAdmin.css", __FILE__));
 			wp_enqueue_style( 'newsletters-admin-base-style', plugins_url("/resources/newsletterBaseStyle.css", __FILE__));
 			wp_add_inline_style("en_custom_newsletter_css", esc_attr(databaseConnector::instance()->getSettingFromDB("newsletterCSS")));
+
+			wp_add_inline_script("newsletters-admin-edit-script", "
+                const ajax_url = ".admin_url( "admin-ajax.php" ).";
+                const ajax_nonce = ".wp_create_nonce( "secure_nonce_name" ), "before");
 		}
 	}
 

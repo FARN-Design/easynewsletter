@@ -32,6 +32,7 @@ class metaBoxes {
 					'en_metaBoxes_obj',
 					[
 						'url' => admin_url('admin-ajax.php'),
+						"nonce" => wp_create_nonce( "secure_nonce_name" )
 					]
 				);
 			}
