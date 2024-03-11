@@ -9,7 +9,7 @@ Author: Farn - Digital Brand Design
 Author URI: https://www.farn.de/
 Text Domain: easynewsletter
 Domain Path: resources/language
-License: GNU GENERAL PUBLIC LICENSE Version 3
+License: GPLv3 or later
 */
 
 //-----------------------------Requirements-----------------------------
