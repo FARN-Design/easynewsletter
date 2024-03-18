@@ -29,25 +29,6 @@ Elevate your newsletters by seamlessly attaching files from your WordPress media
 
 == Frequently Asked Questions ==
 
-= How to install the plugin? =
-
-1. Clone the repo or download the .zip archive
-   ```sh
-   git clone TODO
-   ```
-   or
-   Download: TODO
-
-2. Add the plugin files to the Wordpress instance.
-- Create a new Folder in: `/wp-content/plugins/easynewsletter`
-- Move all files into the new `easynewsletter` folder
-
-3. Activate the plugin at the Wordpress plugin page http://localhost/wp-admin/plugins.php
-
-#### Install via Wordpress Plugin Store
-
-TODO
-
 = How to use the plugin? =
 
 ## Configure the basics
