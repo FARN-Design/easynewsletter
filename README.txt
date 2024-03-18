@@ -1,8 +1,8 @@
 === EasyNewsletter ===
 Contributors: farndesign
-Tags: newsletter
+Tags: newsletter, mailing list, email, newsletter form
 Requires at least: 6.0
-Tested up to: 6.3
+Tested up to: 6.4
 Stable tag: 1.0.0
 Requires PHP: 8.0
 License: GPLv3 or later
@@ -114,15 +114,15 @@ If something is still wrong, you can cancel the sending by clicking "No".
 
 == Screenshots ==
 
-1. Newsletter Creation
-2. Sign Up Form
-3. Newsletter Check
-4. Newsletter Meta Fields
-5. Subscribers Overview
-6. Plugin Overview
-7. Newsletter Overview
-8. Settings
-9. Newsletter Attachments and HTML Replacement
+1. newsletter creation via block editor
+2. sign-up form
+3. subscribers overview with customizable columns
+4. newsletters list
+5. pop-up for sending the current newsletter with subbscriber count
+6. plugins settings page
+7. newsletter attachments and custom html injection
+8. newsletter settings for subject, test mail and excerpt
+9. Easy Newsletter overview
 
 == Changelog ==
 
